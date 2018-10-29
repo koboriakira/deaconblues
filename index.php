@@ -17,7 +17,7 @@
 </head>
 <body>
 <div id="app">
-    <h1 style="margin: 1em; text-align:center;">コボリアキラの要約と反復</h1>
+    <h1 style="margin: 1em; text-align:center;"><a href="<?php echo home_url(); ?>">コボリアキラの要約と反復</a></h1>
     <li v-for="post in posts" v-bind:key="post.title.rendered">
         <section class="hero is-primary">
             <div class="hero-body">
@@ -40,8 +40,9 @@
                 'is-desabled': disabled
                 }]"
             :disabled="disabled"
+            v-show="visible"
             @click="load"
-        >load more</button>
+        >次の記事を読む</button>
     </div>
     <footer class="footer" style="margin-top: 1em;">
         <div class="content" style="text-align:center;">
@@ -58,7 +59,8 @@ var vm = new Vue({
             posts: [],
             page: 0,
             loading: false,
-            disabled: false
+            disabled: false,
+            visible: true
         }
     },
     mounted: function() {
@@ -66,7 +68,16 @@ var vm = new Vue({
     },
     watch: {
         page() {
-            const URL = `http://localhost:8080/wp-json/wp/v2/posts?page=${this.page}&per_page=1`;
+            var url = location.href;
+            var array = url.split("/");
+            console.log(array.length);
+
+            var URL = `http://localhost:8080/wp-json/wp/v2/posts?page=${this.page}&per_page=1`; 
+            if (array.length == 7) {
+                var postId = array.slice(-1)[0];
+                URL = `http://localhost:8080/wp-json/wp/v2/posts/${postId}`;
+                this.visible = false;
+            }
             (async () => {
                 try {
                     const res = await axios.get(URL);
