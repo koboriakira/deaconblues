@@ -12,27 +12,42 @@
 
 <!-- BULMA -->
 <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/common/css/style.css">
 
 </head>
 <body>
 <div id="app">
-    <p>コボリアキラの要約と反復</p>
+    <h1 style="margin: 1em; text-align:center;">コボリアキラの要約と反復</h1>
     <li v-for="post in posts" v-bind:key="post.title.rendered">
-        <h1 class="title"><span v-html="post.title.rendered"></span></h1>
-        <div>
-            <span v-html="post.content.rendered"></span>
-        </div>
+        <section class="hero is-primary">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title" v-html="post.title.rendered" style="font-size: 1.5em;"></h1>
+                </div>
+            </div>
+        </section>
+        <section class="section article">
+            <div class="container">
+                <div v-html="post.content.rendered"></div>
+            </div>
+        </section>
     </li>
-    <button
-        class="button"
-        :class="[{
-            'is-loading': loading,
-            'is-desabled': disabled
-            }]"
-        :disabled="disabled"
-        @click="load"
-    >load more</button>
+    <div style="text-align:center;">
+        <button
+            class="button is-info is-medium"
+            :class="[{
+                'is-loading': loading,
+                'is-desabled': disabled
+                }]"
+            :disabled="disabled"
+            @click="load"
+        >load more</button>
+    </div>
+    <footer class="footer" style="margin-top: 1em;">
+        <div class="content" style="text-align:center;">
+            <p>Copyright kobori akira</p>
+        </div>
+    </footer>
 </div>
 </body>
 <script>
@@ -56,6 +71,7 @@ var vm = new Vue({
                 try {
                     const res = await axios.get(URL);
                     this.posts = this.posts.concat(res.data);
+                    console.log(res.data[0])
                     this.loading = false;
                 } catch (e) {
                     console.log(e);
