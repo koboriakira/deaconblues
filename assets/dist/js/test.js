@@ -1,4 +1,22 @@
+var router = new VueRouter({
+    routes: [
+        {
+            path: 'top',
+            component: {
+                template: "<p>トップページです。</p>"
+            }
+        },
+        {
+            path: 'posts',
+            component: {
+                template: "<p>記事ダミーです。</p>"
+            }
+        }
+    ]
+})
+
 var vm = new Vue({
+    router: router,
     data: {
         title: "",
         message: "Loading...."
