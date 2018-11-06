@@ -82,7 +82,6 @@ var vm = new Vue({
                 try {
                     const res = await axios.get(URL);
                     this.posts = this.posts.concat(res.data);
-                    console.log(res.data[0])
                     this.loading = false;
                 } catch (e) {
                     console.log(e);
