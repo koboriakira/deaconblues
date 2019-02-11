@@ -1,7 +1,20 @@
 const POST = 'http://koboriakira.com/wp-json/wp/v2/posts';
 const PER_PAGE = 3;
 
-let getUrl = (href, page) => {
+let trimLastSlash = href => href.slice(-1) === '/' ? href.slice(0, -1) : href;
+
+let isCategory = url => url.split('//')[1].split('/')[1] === 'category';
+
+let getCategorySlug = url => url.split('//')[1].split('/')[2];
+
+let getUrl = (url, page) => {
+  trimedUrl = trimLastSlash(url);
+  if (isCategory(trimedUrl)) {
+    console.log('category!!!');
+    let categoryId = getCategoryId(getCategorySlug(url));
+    return `${POST}?page=${page}&per_page=${PER_PAGE}&categories=${categoryId}`
+  }
+  console.log(url);
   return `${POST}?page=${page}&per_page=${PER_PAGE}`;
   // if (array.length == 7) {
   //   var postId = array.slice(-1)[0];
@@ -23,7 +36,8 @@ let extractData = datas => {
     return {
       title: data.title.rendered,
       content: addUkClasses(data.content.rendered),
-      date: data.date.slice(0, 10)
+      date: data.date.slice(0, 10),
+      category: getCategory(data.categories[0]),
     };
   })
 }

@@ -15,6 +15,7 @@
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit-icons.min.js"></script>
 
 <!-- original -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/dist/js/categories.js"></script>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/dist/js/wprestapi.js"></script>
 
 <!-- stylesheet -->
@@ -32,6 +33,10 @@
             <article class="uk-article uk-width-1-1">
                 <h1 class="uk-heading-divider uk-text-center" v-html="post.title"></h1>
                 <div class="uk-text-right uk-article-title uk-text-meta">
+                    <a v-bind:href="post.category.link">
+                        <span uk-icon="folder"></span>{{ post.category.name }}
+                    </a>
+                    <span>&nbsp;</span>
                     <span uk-icon="clock"></span>
                     {{ post.date }}
                 </div>
