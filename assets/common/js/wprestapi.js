@@ -8,8 +8,9 @@ let isCategory = url => url.split('//')[1].split('/')[1] === 'category';
 let getCategorySlug = url => url.split('//')[1].split('/').slice(-1)[0];
 
 let getUrl = (url, page) => {
-  if (isCategory(url)) {
-    let categorySlug = getCategorySlug(url);
+  trimedUrl = trimLastSlash(url);
+  if (isCategory(trimedUrl)) {
+    let categorySlug = getCategorySlug(trimedUrl);
     console.log(categorySlug);
     let categoryId = getCategoryId(categorySlug);
     return `${POST}?page=${page}&per_page=${PER_PAGE}&categories=${categoryId}`
@@ -44,7 +45,7 @@ let extractData = datas => {
 
 let getPosts = (page) => {
   return new Promise((resolve, reject) => {
-    let url = getUrl(trimLastSlash(location.href), page);
+    let url = getUrl(location.href, page);
     console.debug(url);
     (async () => {
       try {

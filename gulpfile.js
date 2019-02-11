@@ -9,7 +9,7 @@ var uglify = require('gulp-uglify')
 var sass = require('gulp-sass')
 
 gulp.task("js", function () {
-  gulp.src([path.join(assetsPath, 'dist/js/*.js')])
+  return gulp.src([path.join(assetsPath, 'dist/js/*.js')])
     // .pipe(plumber())
     // .pipe(uglify())
     // .pipe(rename({extname: '.min.js'}))

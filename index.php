@@ -15,8 +15,8 @@
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit-icons.min.js"></script>
 
 <!-- original -->
-<script src="<?php echo get_template_directory_uri(); ?>/assets/dist/js/categories.js"></script>
-<script src="<?php echo get_template_directory_uri(); ?>/assets/dist/js/wprestapi.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/categories.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/wprestapi.js"></script>
 
 <!-- stylesheet -->
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/common/css/uikit.min.css">
