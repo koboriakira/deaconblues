@@ -10,9 +10,12 @@
 <!-- axios -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<!-- axios -->
+<!-- uikit -->
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit.min.js"></script>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit-icons.min.js"></script>
+
+<!-- original -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/dist/js/wprestapi.js"></script>
 
 <!-- stylesheet -->
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/common/css/uikit.min.css">
@@ -79,27 +82,16 @@ var vm = new Vue({
     },
     watch: {
         page() {
-            var url = location.href;
-            var array = url.split("/");
-            console.log(array.length);
-
-            var URL = `http://koboriakira.com/wp-json/wp/v2/posts?page=${this.page}&per_page=1`;
-            if (array.length == 7) {
-                var postId = array.slice(-1)[0];
-                URL = `http://koboriakira.com/wp-json/wp/v2/posts/${postId}`;
-                this.visible = false;
-            }
-            (async () => {
-                try {
-                    const res = await axios.get(URL);
-                    this.posts = this.posts.concat(res.data);
+            console.log(this.page);
+            getPosts(this.page)
+                .then(data => {
+                    this.posts = this.posts.concat(data);
                     this.loading = false;
                     this.textOfLinktNextPost = '次の記事を読む';
-                } catch (e) {
-                    console.log(e);
+                }, error => {
+                    console.log(error);
                     this.empty();
-                }
-            })();
+                })
         }
     },
     methods: {
