@@ -28,14 +28,14 @@
         <h1 class="uk-text-center uk-tile uk-tile-primary"><a href="<?php echo home_url(); ?>">コボリアキラの要約と反復</a></h1>
     </header>
     <div class="uk-margin-auto" style="max-width: 680px">
-        <li v-for="post in posts" v-bind:key="post.title.rendered" class="uk-list">
+        <li v-for="post in posts" v-bind:key="post.title" class="uk-list">
             <article class="uk-article uk-width-1-1">
-                <h1 class="uk-heading-divider uk-text-center" v-html="post.title.rendered"></h1>
-                <div class="uk-text-right uk-text-small">
+                <h1 class="uk-heading-divider uk-text-center" v-html="post.title"></h1>
+                <div class="uk-text-right uk-article-title uk-text-meta">
                     <span uk-icon="clock"></span>
-                    {{ post.date.slice(0, 10) }}
+                    {{ post.date }}
                 </div>
-                <div v-html="post.content.rendered" class="uk-padding-small" style="line-height: 1.8rem;"></div>
+                <div v-html="post.content" class="uk-padding-small" style="line-height: 1.8rem;"></div>
             </article>
         </li>
         <div class="uk-text-center">
@@ -85,11 +85,12 @@ var vm = new Vue({
             console.log(this.page);
             getPosts(this.page)
                 .then(data => {
+                    console.debug(data);
                     this.posts = this.posts.concat(data);
                     this.loading = false;
                     this.textOfLinktNextPost = '次の記事を読む';
                 }, error => {
-                    console.log(error);
+                    console.warn(error);
                     this.empty();
                 })
         }
