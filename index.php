@@ -10,6 +10,10 @@
 <!-- axios -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+<!-- axios -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit.min.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit-icons.min.js"></script>
+
 <!-- stylesheet -->
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/common/css/uikit.min.css">
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/common/css/style.css">
@@ -20,10 +24,14 @@
     <header>
         <h1 class="uk-text-center uk-tile uk-tile-primary"><a href="<?php echo home_url(); ?>">コボリアキラの要約と反復</a></h1>
     </header>
-    <div class="uk-margin-auto" style="max-width: 800px">
+    <div class="uk-margin-auto" style="max-width: 680px">
         <li v-for="post in posts" v-bind:key="post.title.rendered" class="uk-list">
             <article class="uk-article uk-width-1-1">
                 <h1 class="uk-heading-divider uk-text-center" v-html="post.title.rendered"></h1>
+                <div class="uk-text-right uk-text-small">
+                    <span uk-icon="clock"></span>
+                    {{ post.date.slice(0, 10) }}
+                </div>
                 <div v-html="post.content.rendered" class="uk-padding-small" style="line-height: 1.8rem;"></div>
             </article>
         </li>
@@ -31,15 +39,19 @@
             <button
                 class="uk-button"
                 :class="[{
-                    'uk-button-default': loading,
                     'uk-button-primary': !loading,
-                    'is-disabled': disabled
+                    'uk-hidden': disabled || loading
                     }]"
                 :disabled="disabled"
                 v-show="visible"
                 @click="load"
-            >{{ textOfLinktNextPost }}</button>
-            <span uk-spinner="ratio: 4.5"></span>
+            >次の記事を読む</button>
+            <span
+                uk-spinner="ratio: 3"
+                :class="[{
+                    'uk-hidden': disabled || !loading
+                    }]"
+            ></span>
         <div>
     </div>
     <footer class="footer" style="margin-top: 1em;">
@@ -82,7 +94,7 @@ var vm = new Vue({
                     const res = await axios.get(URL);
                     this.posts = this.posts.concat(res.data);
                     this.loading = false;
-                    this.textOfLinktNextPost = 'Next post';
+                    this.textOfLinktNextPost = '次の記事を読む';
                 } catch (e) {
                     console.log(e);
                     this.empty();
@@ -93,7 +105,7 @@ var vm = new Vue({
     methods: {
         load() {
             this.loading = true;
-            this.textOfLinktNextPost = 'Now Loading...';
+            this.textOfLinktNextPost = '';
             this.page++;
         },
         empty() {
