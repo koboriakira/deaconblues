@@ -48,7 +48,7 @@
                 :disabled="disabled"
                 v-show="visible"
                 @click="load"
-            >次の記事を読む</button>
+            >{{ textOfLinktNextPost }}</button>
             <span
                 uk-spinner="ratio: 3"
                 :class="[{
@@ -74,7 +74,7 @@ var vm = new Vue({
             loading: false,
             disabled: false,
             visible: true,
-            textOfLinktNextPost: '次の記事を読む'
+            textOfLinktNextPost: ''
         }
     },
     mounted: function() {
@@ -82,13 +82,12 @@ var vm = new Vue({
     },
     watch: {
         page() {
-            console.log(this.page);
             getPosts(this.page)
                 .then(data => {
                     console.debug(data);
                     this.posts = this.posts.concat(data);
                     this.loading = false;
-                    this.textOfLinktNextPost = '次の記事を読む';
+                    this.textOfLinktNextPost = `次の${PER_PAGE}件を読む`;
                 }, error => {
                     console.warn(error);
                     this.empty();

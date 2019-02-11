@@ -1,5 +1,5 @@
 const POST = 'http://koboriakira.com/wp-json/wp/v2/posts';
-const PER_PAGE = 5;
+const PER_PAGE = 3;
 
 let getUrl = (href, page) => {
   return `${POST}?page=${page}&per_page=${PER_PAGE}`;
