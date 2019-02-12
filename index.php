@@ -28,12 +28,12 @@
 <body>
 <div id="app">
     <header>
-        <h1 class="uk-text-center uk-tile uk-tile-primary"><a href="<?php echo home_url(); ?>">コボリアキラの要約と反復</a></h1>
+        <h1 class="uk-text-center uk-tile uk-tile-primary"><a href="<?php echo home_url(); ?>" class="uk-link-heading">コボリアキラの要約と反復</a></h1>
     </header>
     <div class="uk-margin-auto" style="max-width: 680px">
         <li v-for="post in posts" v-bind:key="post.title" class="uk-list">
             <article class="uk-article uk-width-1-1">
-                <h1 class="uk-heading-divider uk-text-center" v-html="post.title"></h1>
+                <a v-bind:href="post.link" class="uk-link-heading"><h1 class="uk-heading-divider uk-text-center" v-html="post.title"></h1></a>
                 <div class="uk-text-right uk-article-title uk-text-meta">
                     <a v-bind:href="post.category.link">
                         <span uk-icon="folder"></span>{{ post.category.name }}
@@ -91,7 +91,6 @@ var vm = new Vue({
         page() {
             getPosts(this.page)
                 .then(data => {
-                    console.debug(data);
                     this.posts = this.posts.concat(data);
                     this.loading = false;
                     this.textOfLinktNextPost = `次の${PER_PAGE}件を読む`;
