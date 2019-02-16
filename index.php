@@ -36,24 +36,13 @@
             v-bind:key="post.title"
             v-bind:post="post">
         </blog-post>
-        <div class="uk-text-center">
-            <button
-                class="uk-button"
-                :class="[{
-                    'uk-button-primary': !loading,
-                    'uk-hidden': disabled || loading
-                    }]"
-                :disabled="disabled"
-                v-show="visible"
-                @click="load"
-            >{{ textOfLinktNextPost }}</button>
-            <span
-                uk-spinner="ratio: 3"
-                :class="[{
-                    'uk-hidden': disabled || !loading
-                    }]"
-            ></span>
-        <div>
+        <next-articles-load-button
+            v-bind:loading="loading"
+            v-bind:disabled="disabled"
+            v-bind:visible="visible"
+            v-bind:text="textOfLinktNextPost"
+            v-on:load="page++">
+        </next-articles-load-button>
     </div>
     <footer class="footer" style="margin-top: 1em;">
         <div class="content" style="text-align:center;">
@@ -70,14 +59,38 @@ Vue.component('blog-post', {
             <a v-bind:href="post.link" class="uk-link-heading"><h1 class="uk-heading-divider uk-text-center" v-html="post.title"></h1></a>
             <div class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-text-right uk-article-title uk-text-meta">
                 <a v-bind:href="post.category.link">
-                    <span uk-icon="folder"></span>{{ post.category.name }}
+                    <span uk-icon="folder"></span>&nbsp;{{ post.category.name }}
                 </a>
-                <span>&nbsp;</span>
+                <span>&nbsp;&nbsp;</span>
                 <span uk-icon="clock"></span>
                 {{ post.date }}
             </div>
             <div v-html="post.content" class="uk-padding-small" style="line-height: 1.8rem;"></div>
         </article>
+    `
+});
+
+Vue.component('next-articles-load-button', {
+    props: ['loading', 'disabled', 'visible', 'text'],
+    template: `
+        <div class="uk-text-center">
+            <button
+                class="uk-button"
+                :class="[{
+                    'uk-button-primary': !loading,
+                    'uk-hidden': disabled || loading
+                    }]"
+                :disabled="disabled"
+                v-show="visible"
+                v-on:click="$emit('load')"
+            >{{ text }}</button>
+            <span
+                uk-spinner="ratio: 3"
+                :class="[{
+                    'uk-hidden': disabled || !loading
+                    }]"
+            ></span>
+        <div>
     `
 });
 
@@ -94,13 +107,17 @@ var vm = new Vue({
         }
     },
     mounted: function() {
-        this.load();
+        this.loading = true;
+        this.textOfLinktNextPost = '';
+        this.page++;
     },
     watch: {
         page() {
+            console.debug(`page: ${this.page}`);
             getPosts(this.page)
                 .then(data => {
                     this.posts = this.posts.concat(data);
+                    console.debug(this.posts);
                     this.loading = false;
                     this.textOfLinktNextPost = `次の${PER_PAGE}件を読む`;
                 }, error => {
@@ -110,11 +127,6 @@ var vm = new Vue({
         }
     },
     methods: {
-        load() {
-            this.loading = true;
-            this.textOfLinktNextPost = '';
-            this.page++;
-        },
         empty() {
             this.loading = false;
             this.disabled = true;
