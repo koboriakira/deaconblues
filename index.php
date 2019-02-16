@@ -52,7 +52,7 @@
 </div>
 </body>
 <script>
-Vue.component('blog-post', {
+var blogPost = Vue.extend({
     props: ['post'],
     template: `
         <article class="uk-article uk-width-1-1">
@@ -70,7 +70,7 @@ Vue.component('blog-post', {
     `
 });
 
-Vue.component('next-articles-load-button', {
+var nextArticlesLoadButton = Vue.extend({
     props: ['loading', 'disabled', 'visible', 'text'],
     template: `
         <div class="uk-text-center">
@@ -101,6 +101,10 @@ Vue.component('next-articles-load-button', {
 
 new Vue({
     el: '#app',
+    components: {
+        'blog-post': blogPost,
+        'next-articles-load-button': nextArticlesLoadButton
+    },
     // router: router,
     data: function() {
         return {
