@@ -34,8 +34,8 @@
         <blog-post-list v-bind:posts="posts"></blog-post-list>
         <next-articles-load
             v-bind:state="buttonState"
-            v-on:load="loadNewArticles()">
-        </next-articles-load>
+            v-on:load="loadNewArticles()"
+        ></next-articles-load>
     </div>
     <footer class="footer" style="margin-top: 1em;">
         <div class="content" style="text-align:center;">
@@ -63,8 +63,7 @@ var postMetaInfo = Vue.extend({
                 <span uk-icon="folder"></span>&nbsp;{{ category.name }}
             </a>
             <span>&nbsp;&nbsp;</span>
-            <span uk-icon="clock"></span>
-            {{ date }}
+            <span uk-icon="clock"></span>&nbsp;{{ date }}
         </div>
     `
 });
@@ -103,8 +102,8 @@ var blogPostList = Vue.extend({
             <blog-post
                 v-for="post in posts"
                 v-bind:key="post.title"
-                v-bind:post="post">
-            </blog-post>
+                v-bind:post="post"
+            ></blog-post>
         </div>
     `
 });
@@ -115,13 +114,12 @@ var nextArticlesLoadButton = Vue.extend({
     props: ['hidden'],
     template: `
         <div>
-        <button
-            class="uk-button uk-button-primary"
-            :class="[{
-                'uk-hidden': hidden
-                }]"
-            v-on:click="_execute"
-        >次の3件を読む</button></div>
+            <button
+                class="uk-button uk-button-primary"
+                :class="[{'uk-hidden': hidden}]"
+                v-on:click="_execute"
+            >次の${PER_PAGE}件を読む</button>
+        </div>
     `,
     methods: {
         _execute: function() {
@@ -136,9 +134,7 @@ var loading = Vue.extend({
     template: `
         <span
             uk-spinner="ratio: 3"
-            :class="[{
-                'uk-hidden': hidden
-                }]"
+            :class="[{'uk-hidden': hidden}]"
         ></span>
     `
 })
@@ -153,11 +149,9 @@ var nextArticlesLoad = Vue.extend({
         <div class="uk-text-center">
             <next-articles-load-button
                 v-bind:hidden="state.disabled || state.loading"
-                v-on:execute="_load">
-            </next-articles-load-button>
-            <loading
-                v-bind:hidden="state.disabled || !state.loading">
-            </loading>
+                v-on:execute="_load"
+            ></next-articles-load-button>
+            <loading v-bind:hidden="state.disabled || !state.loading"></loading>
         <div>
     `,
     methods: {
