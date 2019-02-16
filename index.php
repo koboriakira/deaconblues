@@ -7,7 +7,7 @@
 
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.1/dist/vue-router.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.1/dist/vue-router.js"></script>-->
 
 <!-- axios -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -27,9 +27,7 @@
 </head>
 <body>
 <div id="app">
-    <header>
-        <h1 class="uk-text-center uk-tile uk-tile-primary"><a href="<?php echo home_url(); ?>" class="uk-link-heading">コボリアキラの要約と反復</a></h1>
-    </header>
+    <header-container></header-container>
     <div class="uk-margin-auto" style="max-width: 680px">
         <blog-post-list v-bind:posts="posts"></blog-post-list>
         <next-articles-load
@@ -37,20 +35,28 @@
             v-on:load="loadNewArticles()"
         ></next-articles-load>
     </div>
-    <footer class="footer" style="margin-top: 1em;">
-        <div class="content" style="text-align:center;">
-            <p>Copyright kobori akira</p>
-        </div>
-    </footer>
+    <footer-container>Copyright by kobori akira<footer-container>
 </div>
 </body>
 <script>
+
+var headerContainer = Vue.extend({
+    template: `
+        <header>
+            <h1 class="uk-text-center uk-tile uk-tile-primary">
+                <a href="<?php echo home_url(); ?>" class="uk-link-heading">コボリアキラの要約と反復</a>
+            </h1>
+        </header>
+    `
+});
 
 var postTitle = Vue.extend({
     name: 'post-title',
     props: ['title', 'link'],
     template: `
-        <a v-bind:href="link" class="uk-link-heading"><h1 class="uk-heading-divider uk-text-center" v-html="title"></h1></a>
+        <a v-bind:href="link" class="uk-link-heading">
+            <h1 class="uk-heading-divider uk-text-center" v-html="title"></h1>
+        </a>
     `
 });
 
@@ -161,13 +167,24 @@ var nextArticlesLoad = Vue.extend({
     }
 });
 
+var footerContainer = Vue.extend({
+    template: `
+        <footer class="footer" style="margin-top: 1em;">
+            <div class="content" style="text-align:center;">
+                <p><slot></slot></p>
+            </div>
+        </footer>
+    `
+});
+
 new Vue({
     el: '#app',
     components: {
+        'header-container': headerContainer,
         'blog-post-list': blogPostList,
-        'next-articles-load': nextArticlesLoad
+        'next-articles-load': nextArticlesLoad,
+        'footer-container': footerContainer,
     },
-    // router: router,
     data: function() {
         return {
             posts: [],
