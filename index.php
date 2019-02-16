@@ -1,7 +1,9 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <head>
-<title>はじめてのVue.js</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>コボリアキラの要約と反復</title>
 
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
@@ -10,39 +12,57 @@
 <!-- axios -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-<!-- BULMA -->
-<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<!-- uikit -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit.min.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit-icons.min.js"></script>
+
+<!-- original -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/categories.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/wprestapi.js"></script>
+
+<!-- stylesheet -->
+<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/common/css/uikit.min.css">
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/common/css/style.css">
 
 </head>
 <body>
 <div id="app">
-    <h1 style="margin: 1em; text-align:center;"><a href="<?php echo home_url(); ?>">コボリアキラの要約と反復</a></h1>
-    <li v-for="post in posts" v-bind:key="post.title.rendered">
-        <section class="hero is-primary">
-            <div class="hero-body">
-                <div class="container">
-                    <h1 class="title" v-html="post.title.rendered" style="font-size: 1.5em;"></h1>
+    <header>
+        <h1 class="uk-text-center uk-tile uk-tile-primary"><a href="<?php echo home_url(); ?>" class="uk-link-heading">コボリアキラの要約と反復</a></h1>
+    </header>
+    <div class="uk-margin-auto" style="max-width: 680px">
+        <li v-for="post in posts" v-bind:key="post.title" class="uk-list">
+            <article class="uk-article uk-width-1-1">
+                <a v-bind:href="post.link" class="uk-link-heading"><h1 class="uk-heading-divider uk-text-center" v-html="post.title"></h1></a>
+                <div class="uk-text-right uk-article-title uk-text-meta">
+                    <a v-bind:href="post.category.link">
+                        <span uk-icon="folder"></span>{{ post.category.name }}
+                    </a>
+                    <span>&nbsp;</span>
+                    <span uk-icon="clock"></span>
+                    {{ post.date }}
                 </div>
-            </div>
-        </section>
-        <section class="section article">
-            <div class="container">
-                <div v-html="post.content.rendered"></div>
-            </div>
-        </section>
-    </li>
-    <div style="text-align:center;">
-        <button
-            class="button is-info is-medium"
-            :class="[{
-                'is-loading': loading,
-                'is-desabled': disabled
-                }]"
-            :disabled="disabled"
-            v-show="visible"
-            @click="load"
-        >次の記事を読む</button>
+                <div v-html="post.content" class="uk-padding-small" style="line-height: 1.8rem;"></div>
+            </article>
+        </li>
+        <div class="uk-text-center">
+            <button
+                class="uk-button"
+                :class="[{
+                    'uk-button-primary': !loading,
+                    'uk-hidden': disabled || loading
+                    }]"
+                :disabled="disabled"
+                v-show="visible"
+                @click="load"
+            >{{ textOfLinktNextPost }}</button>
+            <span
+                uk-spinner="ratio: 3"
+                :class="[{
+                    'uk-hidden': disabled || !loading
+                    }]"
+            ></span>
+        <div>
     </div>
     <footer class="footer" style="margin-top: 1em;">
         <div class="content" style="text-align:center;">
@@ -60,7 +80,8 @@ var vm = new Vue({
             page: 0,
             loading: false,
             disabled: false,
-            visible: true
+            visible: true,
+            textOfLinktNextPost: ''
         }
     },
     mounted: function() {
@@ -68,31 +89,21 @@ var vm = new Vue({
     },
     watch: {
         page() {
-            var url = location.href;
-            var array = url.split("/");
-            console.log(array.length);
-
-            var URL = `http://localhost:8080/wp-json/wp/v2/posts?page=${this.page}&per_page=1`; 
-            if (array.length == 7) {
-                var postId = array.slice(-1)[0];
-                URL = `http://localhost:8080/wp-json/wp/v2/posts/${postId}`;
-                this.visible = false;
-            }
-            (async () => {
-                try {
-                    const res = await axios.get(URL);
-                    this.posts = this.posts.concat(res.data);
+            getPosts(this.page)
+                .then(data => {
+                    this.posts = this.posts.concat(data);
                     this.loading = false;
-                } catch (e) {
-                    console.log(e);
+                    this.textOfLinktNextPost = `次の${PER_PAGE}件を読む`;
+                }, error => {
+                    console.warn(error);
                     this.empty();
-                }
-            })();
+                })
         }
     },
     methods: {
         load() {
             this.loading = true;
+            this.textOfLinktNextPost = '';
             this.page++;
         },
         empty() {
