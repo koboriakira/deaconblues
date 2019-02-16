@@ -49,23 +49,53 @@
 </div>
 </body>
 <script>
-var blogPost = Vue.extend({
+
+var postTitle = Vue.extend({
+    name: 'post-title',
+    props: ['title', 'link'],
+    template: `
+        <a v-bind:href="link" class="uk-link-heading"><h1 class="uk-heading-divider uk-text-center" v-html="title"></h1></a>
+    `
+});
+
+var postMetaInfo = Vue.extend({
+    name: 'post-meta-info',
     props: ['post'],
     template: `
+        <div class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-text-right uk-article-title uk-text-meta">
+            <a v-bind:href="post.category.link">
+                <span uk-icon="folder"></span>&nbsp;{{ post.category.name }}
+            </a>
+            <span>&nbsp;&nbsp;</span>
+            <span uk-icon="clock"></span>
+            {{ post.date }}
+        </div>
+    `
+});
+
+var postContent = Vue.extend({
+    name: 'post-content',
+    props: ['content'],
+    template: `<div v-html="content" class="uk-padding-small" style="line-height: 1.8rem;"></div>`
+});
+
+var blogPost = Vue.extend({
+    name: 'blog-post',
+    props: ['post'],
+    components: {
+        'post-meta-info': postMetaInfo,
+        'post-title': postTitle,
+        'post-content': postContent
+    },
+    template: `
         <article class="uk-article uk-width-1-1">
-            <a v-bind:href="post.link" class="uk-link-heading"><h1 class="uk-heading-divider uk-text-center" v-html="post.title"></h1></a>
-            <div class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-text-right uk-article-title uk-text-meta">
-                <a v-bind:href="post.category.link">
-                    <span uk-icon="folder"></span>&nbsp;{{ post.category.name }}
-                </a>
-                <span>&nbsp;&nbsp;</span>
-                <span uk-icon="clock"></span>
-                {{ post.date }}
-            </div>
-            <div v-html="post.content" class="uk-padding-small" style="line-height: 1.8rem;"></div>
+            <post-title v-bind:title="post.title" v-bind:link="post.link"></post-title>
+            <post-meta-info v-bind:post="post"></post-meta-info>
+            <post-content v-bind:content="post.content"></post-content>
         </article>
     `
 });
+
 
 var nextArticlesLoadButton = Vue.extend({
     props: ['state'],
