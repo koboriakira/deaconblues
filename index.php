@@ -34,7 +34,7 @@
         <blog-post-list v-bind:posts="posts"></blog-post-list>
         <next-articles-load
             v-bind:state="buttonState"
-            v-on:next="load()">
+            v-on:load="loadNewArticles()">
         </next-articles-load>
     </div>
     <footer class="footer" style="margin-top: 1em;">
@@ -120,12 +120,12 @@ var nextArticlesLoadButton = Vue.extend({
             :class="[{
                 'uk-hidden': hidden
                 }]"
-            v-on:click="clickButton"
+            v-on:click="_execute"
         >次の3件を読む</button></div>
     `,
     methods: {
-        clickButton: function() {
-            this.$emit('clicked');
+        _execute: function() {
+            this.$emit('execute');
         }
     }
 });
@@ -153,7 +153,7 @@ var nextArticlesLoad = Vue.extend({
         <div class="uk-text-center">
             <next-articles-load-button
                 v-bind:hidden="state.disabled || state.loading"
-                v-on:clicked="nextArticle">
+                v-on:execute="_load">
             </next-articles-load-button>
             <loading
                 v-bind:hidden="state.disabled || !state.loading">
@@ -161,8 +161,8 @@ var nextArticlesLoad = Vue.extend({
         <div>
     `,
     methods: {
-        nextArticle: function() {
-            this.$emit('next');
+        _load: function() {
+            this.$emit('load');
         }
     }
 });
@@ -185,7 +185,7 @@ new Vue({
         }
     },
     mounted: function() {
-        this.load();
+        this.loadNewArticles();
     },
     watch: {
         page() {
@@ -196,7 +196,7 @@ new Vue({
         }
     },
     methods: {
-        load() {
+        loadNewArticles() {
             this.buttonState.loading = true;
             this.page++;
         },
