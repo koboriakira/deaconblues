@@ -94,7 +94,8 @@ Vue.component('next-articles-load-button', {
     `
 });
 
-var vm = new Vue({
+new Vue({
+    el: '#app',
     // router: router,
     data: function() {
         return {
@@ -132,7 +133,6 @@ var vm = new Vue({
             this.disabled = true;
         }
     }
-})
-vm.$mount('#app');
+});
 </script>
 </html>
