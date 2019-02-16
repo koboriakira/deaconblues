@@ -64,6 +64,7 @@ let callAxios = url => {
     (async () => {
       try {
         const res = await axios.get(url);
+        console.log(res);
         resolve(res);
       } catch (e) {
         reject(e);
@@ -80,6 +81,8 @@ let getPosts = (page) => {
       .then(res => {
         const data = param.isSingle ? [res.data] : res.data;
         resolve(extractData(data));
+      }, error => {
+        reject(error);
       });
   })
 }

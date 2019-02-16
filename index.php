@@ -39,7 +39,6 @@
         <next-articles-load-button
             v-bind:loading="loading"
             v-bind:disabled="disabled"
-            v-bind:visible="visible"
             v-bind:text="textOfLinktNextPost"
             v-on:next="load()">
         </next-articles-load-button>
@@ -71,7 +70,7 @@ var blogPost = Vue.extend({
 });
 
 var nextArticlesLoadButton = Vue.extend({
-    props: ['loading', 'disabled', 'visible', 'text'],
+    props: ['loading', 'disabled', 'text'],
     template: `
         <div class="uk-text-center">
             <button
@@ -81,7 +80,6 @@ var nextArticlesLoadButton = Vue.extend({
                     'uk-hidden': disabled || loading
                     }]"
                 :disabled="disabled"
-                v-show="visible"
                 v-on:click="clickButton"
             >{{ text }}</button>
             <span
@@ -112,7 +110,6 @@ new Vue({
             page: 0,
             loading: false,
             disabled: false,
-            visible: true,
             textOfLinktNextPost: ''
         }
     },
@@ -121,7 +118,6 @@ new Vue({
     },
     watch: {
         page() {
-            console.debug(`page: ${this.page}`);
             getPosts(this.page)
                 .then(data => {
                     this.posts = this.posts.concat(data);
