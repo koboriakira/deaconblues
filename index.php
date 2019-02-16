@@ -37,9 +37,7 @@
             v-bind:post="post">
         </blog-post>
         <next-articles-load-button
-            v-bind:loading="loading"
-            v-bind:disabled="disabled"
-            v-bind:text="textOfLinktNextPost"
+            v-bind:state="buttonState"
             v-on:next="load()">
         </next-articles-load-button>
     </div>
@@ -70,22 +68,22 @@ var blogPost = Vue.extend({
 });
 
 var nextArticlesLoadButton = Vue.extend({
-    props: ['loading', 'disabled', 'text'],
+    props: ['state'],
     template: `
         <div class="uk-text-center">
             <button
                 class="uk-button"
                 :class="[{
-                    'uk-button-primary': !loading,
-                    'uk-hidden': disabled || loading
+                    'uk-button-primary': !state.loading,
+                    'uk-hidden': state.disabled || state.loading
                     }]"
-                :disabled="disabled"
+                :disabled="state.disabled"
                 v-on:click="clickButton"
-            >{{ text }}</button>
+            >{{ state.text }}</button>
             <span
                 uk-spinner="ratio: 3"
                 :class="[{
-                    'uk-hidden': disabled || !loading
+                    'uk-hidden': state.disabled || !state.loading
                     }]"
             ></span>
         <div>
@@ -108,9 +106,11 @@ new Vue({
         return {
             posts: [],
             page: 0,
-            loading: false,
-            disabled: false,
-            textOfLinktNextPost: ''
+            buttonState: {
+                loading: false,
+                disabled: false,
+                text: ''
+            }
         }
     },
     mounted: function() {
@@ -123,26 +123,26 @@ new Vue({
                 .then(data => {
                     this.posts = this.posts.concat(data);
                     console.debug(this.posts);
-                    this.loading = false;
-                    this.textOfLinktNextPost = `次の${PER_PAGE}件を読む`;
+                    this.buttonState.loading = false;
+                    this.buttonState.text = `次の${PER_PAGE}件を読む`;
                 }, error => {
                     console.warn(error);
                     this.empty();
                 });
             if (requestParam.isSingle) {
-                this.disabled = true;
+                this.buttonState.disabled = true;
             }
         }
     },
     methods: {
         load() {
-            this.loading = true;
-            this.textOfLinktNextPost = '';
+            this.buttonState.loading = true;
+            this.buttonState.text = '';
             this.page++;
         },
         empty() {
-            this.loading = false;
-            this.disabled = true;
+            this.buttonState.loading = false;
+            this.buttonState.disabled = true;
         }
     }
 });
