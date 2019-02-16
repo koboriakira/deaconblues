@@ -31,15 +31,11 @@
         <h1 class="uk-text-center uk-tile uk-tile-primary"><a href="<?php echo home_url(); ?>" class="uk-link-heading">コボリアキラの要約と反復</a></h1>
     </header>
     <div class="uk-margin-auto" style="max-width: 680px">
-        <blog-post
-            v-for="post in posts"
-            v-bind:key="post.title"
-            v-bind:post="post">
-        </blog-post>
-        <next-articles-load-button
+        <blog-post-list v-bind:posts="posts"></blog-post-list>
+        <next-articles-load
             v-bind:state="buttonState"
             v-on:next="load()">
-        </next-articles-load-button>
+        </next-articles-load>
     </div>
     <footer class="footer" style="margin-top: 1em;">
         <div class="content" style="text-align:center;">
@@ -60,15 +56,15 @@ var postTitle = Vue.extend({
 
 var postMetaInfo = Vue.extend({
     name: 'post-meta-info',
-    props: ['post'],
+    props: ['category', 'date'],
     template: `
         <div class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-text-right uk-article-title uk-text-meta">
-            <a v-bind:href="post.category.link">
-                <span uk-icon="folder"></span>&nbsp;{{ post.category.name }}
+            <a v-bind:href="category.link">
+                <span uk-icon="folder"></span>&nbsp;{{ category.name }}
             </a>
             <span>&nbsp;&nbsp;</span>
             <span uk-icon="clock"></span>
-            {{ post.date }}
+            {{ date }}
         </div>
     `
 });
@@ -90,35 +86,82 @@ var blogPost = Vue.extend({
     template: `
         <article class="uk-article uk-width-1-1">
             <post-title v-bind:title="post.title" v-bind:link="post.link"></post-title>
-            <post-meta-info v-bind:post="post"></post-meta-info>
+            <post-meta-info v-bind:category="post.category" v-bind:date="post.date"></post-meta-info>
             <post-content v-bind:content="post.content"></post-content>
         </article>
     `
 });
 
+var blogPostList = Vue.extend({
+    name: 'blog-post-list',
+    components: {
+        'blog-post': blogPost
+    },
+    props: ['posts'],
+    template: `
+        <div>
+            <blog-post
+                v-for="post in posts"
+                v-bind:key="post.title"
+                v-bind:post="post">
+            </blog-post>
+        </div>
+    `
+});
+
 
 var nextArticlesLoadButton = Vue.extend({
-    props: ['state'],
+    name: 'next-articles-load-button',
+    props: ['hidden'],
     template: `
-        <div class="uk-text-center">
-            <button
-                class="uk-button"
-                :class="[{
-                    'uk-button-primary': !state.loading,
-                    'uk-hidden': state.disabled || state.loading
-                    }]"
-                v-on:click="clickButton"
-            >{{ state.text }}</button>
-            <span
-                uk-spinner="ratio: 3"
-                :class="[{
-                    'uk-hidden': state.disabled || !state.loading
-                    }]"
-            ></span>
         <div>
+        <button
+            class="uk-button uk-button-primary"
+            :class="[{
+                'uk-hidden': hidden
+                }]"
+            v-on:click="clickButton"
+        >次の3件を読む</button></div>
     `,
     methods: {
         clickButton: function() {
+            this.$emit('clicked');
+        }
+    }
+});
+
+var loading = Vue.extend({
+    name: 'loading',
+    props: ['hidden'],
+    template: `
+        <span
+            uk-spinner="ratio: 3"
+            :class="[{
+                'uk-hidden': hidden
+                }]"
+        ></span>
+    `
+})
+
+var nextArticlesLoad = Vue.extend({
+    components: {
+        'next-articles-load-button': nextArticlesLoadButton,
+        'loading': loading
+    },
+    props: ['state'],
+    template: `
+        <div class="uk-text-center">
+            <next-articles-load-button
+                v-bind:hidden="state.disabled || state.loading"
+                v-on:clicked="nextArticle">
+            </next-articles-load-button>
+            <loading
+                v-bind:hidden="state.disabled || !state.loading">
+            </loading>
+        <div>
+    `,
+    methods: {
+        nextArticle: function() {
             this.$emit('next');
         }
     }
@@ -127,8 +170,8 @@ var nextArticlesLoadButton = Vue.extend({
 new Vue({
     el: '#app',
     components: {
-        'blog-post': blogPost,
-        'next-articles-load-button': nextArticlesLoadButton
+        'blog-post-list': blogPostList,
+        'next-articles-load': nextArticlesLoad
     },
     // router: router,
     data: function() {
@@ -137,8 +180,7 @@ new Vue({
             page: 0,
             buttonState: {
                 loading: false,
-                disabled: false,
-                text: ''
+                disabled: false
             }
         }
     },
@@ -156,14 +198,12 @@ new Vue({
     methods: {
         load() {
             this.buttonState.loading = true;
-            this.buttonState.text = '';
             this.page++;
         },
         successToLoad(data) {
             this.posts = this.posts.concat(data);
             console.debug(this.posts);
             this.buttonState.loading = false;
-            this.buttonState.text = `次の${PER_PAGE}件を読む`;
         },
         failToLoad(error) {
             console.warn(error);
