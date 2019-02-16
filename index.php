@@ -41,7 +41,7 @@
             v-bind:disabled="disabled"
             v-bind:visible="visible"
             v-bind:text="textOfLinktNextPost"
-            v-on:load="page++">
+            v-on:next="load()">
         </next-articles-load-button>
     </div>
     <footer class="footer" style="margin-top: 1em;">
@@ -82,7 +82,7 @@ Vue.component('next-articles-load-button', {
                     }]"
                 :disabled="disabled"
                 v-show="visible"
-                v-on:click="$emit('load')"
+                v-on:click="clickButton"
             >{{ text }}</button>
             <span
                 uk-spinner="ratio: 3"
@@ -91,7 +91,12 @@ Vue.component('next-articles-load-button', {
                     }]"
             ></span>
         <div>
-    `
+    `,
+    methods: {
+        clickButton: function() {
+            this.$emit('next');
+        }
+    }
 });
 
 new Vue({
@@ -108,9 +113,7 @@ new Vue({
         }
     },
     mounted: function() {
-        this.loading = true;
-        this.textOfLinktNextPost = '';
-        this.page++;
+        this.load();
     },
     watch: {
         page() {
@@ -128,6 +131,11 @@ new Vue({
         }
     },
     methods: {
+        load() {
+            this.loading = true;
+            this.textOfLinktNextPost = '';
+            this.page++;
+        },
         empty() {
             this.loading = false;
             this.disabled = true;
