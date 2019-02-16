@@ -77,7 +77,6 @@ var nextArticlesLoadButton = Vue.extend({
                     'uk-button-primary': !state.loading,
                     'uk-hidden': state.disabled || state.loading
                     }]"
-                :disabled="state.disabled"
                 v-on:click="clickButton"
             >{{ state.text }}</button>
             <span
@@ -120,18 +119,8 @@ new Vue({
         page() {
             let requestParam = createParam(this.page);
             getPosts(requestParam)
-                .then(data => {
-                    this.posts = this.posts.concat(data);
-                    console.debug(this.posts);
-                    this.buttonState.loading = false;
-                    this.buttonState.text = `次の${PER_PAGE}件を読む`;
-                }, error => {
-                    console.warn(error);
-                    this.empty();
-                });
-            if (requestParam.isSingle) {
-                this.buttonState.disabled = true;
-            }
+                .then(data => this.successToLoad(data), err => this.failToLoad(err));
+            this.buttonState.disabled = requestParam.isSingle;
         }
     },
     methods: {
@@ -140,8 +129,14 @@ new Vue({
             this.buttonState.text = '';
             this.page++;
         },
-        empty() {
+        successToLoad(data) {
+            this.posts = this.posts.concat(data);
+            console.debug(this.posts);
             this.buttonState.loading = false;
+            this.buttonState.text = `次の${PER_PAGE}件を読む`;
+        },
+        failToLoad(error) {
+            console.warn(error);
             this.buttonState.disabled = true;
         }
     }
