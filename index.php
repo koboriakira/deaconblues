@@ -34,11 +34,7 @@
         <blog-post
             v-for="post in posts"
             v-bind:key="post.title"
-            v-bind:title="post.title"
-            v-bind:link="post.link"
-            v-bind:date="post.date"
-            v-bind:category="post.category"
-            v-bind:content="post.content">
+            v-bind:post="post">
         </blog-post>
         <div class="uk-text-center">
             <button
@@ -68,19 +64,19 @@
 </body>
 <script>
 Vue.component('blog-post', {
-    props: ['title', 'link', 'date', 'category', 'content'],
+    props: ['post'],
     template: `
         <article class="uk-article uk-width-1-1">
-            <a v-bind:href="link" class="uk-link-heading"><h1 class="uk-heading-divider uk-text-center" v-html="title"></h1></a>
+            <a v-bind:href="post.link" class="uk-link-heading"><h1 class="uk-heading-divider uk-text-center" v-html="post.title"></h1></a>
             <div class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-text-right uk-article-title uk-text-meta">
-                <a v-bind:href="category.link">
-                    <span uk-icon="folder"></span>{{ category.name }}
+                <a v-bind:href="post.category.link">
+                    <span uk-icon="folder"></span>{{ post.category.name }}
                 </a>
                 <span>&nbsp;</span>
                 <span uk-icon="clock"></span>
-                {{ date }}
+                {{ post.date }}
             </div>
-            <div v-html="content" class="uk-padding-small" style="line-height: 1.8rem;"></div>
+            <div v-html="post.content" class="uk-padding-small" style="line-height: 1.8rem;"></div>
         </article>
     `
 });
