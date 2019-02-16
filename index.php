@@ -118,7 +118,8 @@ new Vue({
     },
     watch: {
         page() {
-            getPosts(this.page)
+            let requestParam = createParam(this.page);
+            getPosts(requestParam)
                 .then(data => {
                     this.posts = this.posts.concat(data);
                     console.debug(this.posts);
@@ -127,7 +128,10 @@ new Vue({
                 }, error => {
                     console.warn(error);
                     this.empty();
-                })
+                });
+            if (requestParam.isSingle) {
+                this.disabled = true;
+            }
         }
     },
     methods: {

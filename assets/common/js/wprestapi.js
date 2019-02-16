@@ -73,13 +73,12 @@ let callAxios = url => {
   });
 }
 
-let getPosts = (page) => {
+let getPosts = (requestParam) => {
   return new Promise((resolve, reject) => {
-    let param = createParam(page);
-    console.log(param.url);
-    callAxios(param.url)
+    console.log(requestParam.url);
+    callAxios(requestParam.url)
       .then(res => {
-        const data = param.isSingle ? [res.data] : res.data;
+        const data = requestParam.isSingle ? [res.data] : res.data;
         resolve(extractData(data));
       }, error => {
         reject(error);
