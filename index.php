@@ -206,10 +206,64 @@ var homeContainer = Vue.extend({
     },
     watch: {
         page() {
-            let requestParam = createParam(this.page);
-            getPosts(requestParam)
+            let param = {page: this.page}
+            getPosts(param)
                 .then(data => this.successToLoad(data), err => this.failToLoad(err));
-            this.buttonState.disabled = requestParam.isSingle;
+        }
+    },
+    methods: {
+        loadNewArticles() {
+            this.buttonState.loading = true;
+            this.page++;
+        },
+        successToLoad(data) {
+            this.posts = this.posts.concat(data);
+            console.debug(this.posts);
+            this.buttonState.loading = false;
+        },
+        failToLoad(error) {
+            console.warn(error);
+            this.buttonState.disabled = true;
+        }
+    }
+});
+
+var categoryContainer = Vue.extend({
+    name: 'category-container',
+    components: {
+        'blog-post-list': blogPostList,
+        'next-articles-load': nextArticlesLoad
+    },
+    template: `
+        <div>
+            <blog-post-list v-bind:posts="posts"></blog-post-list>
+            <next-articles-load
+                v-bind:state="buttonState"
+                v-on:load="loadNewArticles()"
+            ></next-articles-load>
+        </div>
+    `,
+    data: function() {
+        return {
+            posts: [],
+            page: 0,
+            buttonState: {
+                loading: false,
+                disabled: false
+            }
+        }
+    },
+    mounted: function() {
+        this.loadNewArticles();
+    },
+    watch: {
+        page() {
+            let param = {
+                category: this.$route.params,
+                page: this.page
+            };
+            getCategoryPosts(param)
+                .then(data => this.successToLoad(data), err => this.failToLoad(err));
         }
     },
     methods: {
@@ -279,6 +333,10 @@ var router = new VueRouter({
             path: '/:year/:month/:day/:postid',
             component: singleContainer,
             props: true
+        },
+        {
+            path: '/category/:first',
+            component: categoryContainer,
         }
     ]
 });

@@ -1,4 +1,4 @@
-const HTTP = 'http://'
+const ORIGIN = location.origin;
 const POST = '/wp-json/wp/v2/posts';
 const PER_PAGE = 3;
 
@@ -22,12 +22,12 @@ let createParam = page => {
     let categoryId = getCategoryId(getCategorySlug());
     return {
       isCategory: true,
-      url: `${HTTP}${domain}${POST}?page=${page}&per_page=${PER_PAGE}&categories=${categoryId}`,
+      url: `${ORIGIN}${POST}?page=${page}&per_page=${PER_PAGE}&categories=${categoryId}`,
     };
   }
 
   return {
-    url: `${HTTP}${domain}${POST}?page=${page}&per_page=${PER_PAGE}`
+    url: `${ORIGIN}${POST}?page=${page}&per_page=${PER_PAGE}`
   };
 }
 
@@ -52,6 +52,7 @@ let extractData = datas => {
 }
 
 let callAxios = url => {
+  console.log(location);
   return new Promise((resolve, reject) => {
     (async () => {
       try {
@@ -65,9 +66,32 @@ let callAxios = url => {
   });
 }
 
-let getPosts = (requestParam) => {
+let getPosts = (param) => {
+  const domain = getDomain();
   return new Promise((resolve, reject) => {
-    callAxios(requestParam.url)
+    callAxios(`${ORIGIN}${POST}?page=${param.page}&per_page=${PER_PAGE}`)
+      .then(res => {
+        resolve(extractData(res.data));
+      }, error => {
+        reject(error);
+      });
+  })
+}
+
+let getLastCategorySlug = (param) => {
+  if (param.category.third !== undefined) return param.category.third;
+  if (param.category.second !== undefined) return param.category.second;
+  if (param.category.first !== undefined) return param.category.first;
+  throw new Error('Not found category slug.');
+}
+
+let getCategoryPosts = (param) => {
+  const domain = getDomain();
+  const slug = getLastCategorySlug(param);
+  let categoryId = getCategoryId(slug);
+  console.log(`${categoryId}: ${slug}`);
+  return new Promise((resolve, reject) => {
+    callAxios(`${ORIGIN}${POST}?page=${param.page}&per_page=${PER_PAGE}&categories=${categoryId}`)
       .then(res => {
         resolve(extractData(res.data));
       }, error => {
@@ -79,7 +103,7 @@ let getPosts = (requestParam) => {
 let getSinglePost = (postId) => {
   const domain = getDomain();
   return new Promise((resolve, reject) => {
-    callAxios(`${HTTP}${domain}${POST}/${postId}`)
+    callAxios(`${ORIGIN}${POST}/${postId}`)
       .then(res => {
         resolve(extractData([res.data]));
       }, error => {
