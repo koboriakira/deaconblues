@@ -84,11 +84,13 @@ var blogPost = Vue.extend({
         'post-content': postContent
     },
     template: `
-        <article class="uk-article uk-width-1-1">
-            <post-title v-bind:title="post.title" v-bind:link="post.link"></post-title>
-            <post-meta-info v-bind:category="post.category" v-bind:date="post.date"></post-meta-info>
-            <post-content v-bind:content="post.content"></post-content>
-        </article>
+        <div class="uk-margin-auto" style="max-width: 680px">
+            <article class="uk-article uk-width-1-1">
+                <post-title v-bind:title="post.title" v-bind:link="post.link"></post-title>
+                <post-meta-info v-bind:category="post.category" v-bind:date="post.date"></post-meta-info>
+                <post-content v-bind:content="post.content"></post-content>
+            </article>
+        </div>
     `
 });
 
@@ -182,13 +184,11 @@ var homeContainer = Vue.extend({
     },
     template: `
         <div>
-            <div class="uk-margin-auto" style="max-width: 680px">
-                <blog-post-list v-bind:posts="posts"></blog-post-list>
-                <next-articles-load
-                    v-bind:state="buttonState"
-                    v-on:load="loadNewArticles()"
-                ></next-articles-load>
-            </div>
+            <blog-post-list v-bind:posts="posts"></blog-post-list>
+            <next-articles-load
+                v-bind:state="buttonState"
+                v-on:load="loadNewArticles()"
+            ></next-articles-load>
         </div>
     `,
     data: function() {
@@ -236,9 +236,7 @@ var singleContainer = Vue.extend({
     },
     template: `
         <div>
-            <div class="uk-margin-auto" style="max-width: 680px">
-                <blog-post-list v-bind:posts="posts"></blog-post-list>
-            </div>
+            <blog-post-list v-bind:posts="posts"></blog-post-list>
         </div>
     `,
     data: function() {

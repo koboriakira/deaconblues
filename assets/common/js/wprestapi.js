@@ -18,14 +18,6 @@ let getCategorySlug = () => trimProtocol(trimLastSlash(location.href)).split('/'
 
 let createParam = page => {
   const domain = getDomain();
-
-  if (isSingle()) {
-    return {
-      isSingle: true,
-      url: `${HTTP}${domain}${POST}/${getPostId(location.href)}`,
-    };
-  }
-
   if (isCategory()) {
     let categoryId = getCategoryId(getCategorySlug());
     return {
@@ -75,11 +67,9 @@ let callAxios = url => {
 
 let getPosts = (requestParam) => {
   return new Promise((resolve, reject) => {
-    console.log(requestParam.url);
     callAxios(requestParam.url)
       .then(res => {
-        const data = requestParam.isSingle ? [res.data] : res.data;
-        resolve(extractData(data));
+        resolve(extractData(res.data));
       }, error => {
         reject(error);
       });
@@ -89,7 +79,6 @@ let getPosts = (requestParam) => {
 let getSinglePost = (postId) => {
   const domain = getDomain();
   return new Promise((resolve, reject) => {
-    console.log(`${HTTP}${domain}${POST}/${postId}`);
     callAxios(`${HTTP}${domain}${POST}/${postId}`)
       .then(res => {
         resolve(extractData([res.data]));
