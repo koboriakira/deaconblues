@@ -98,9 +98,8 @@ let getCategoryPosts = async (param) => {
 
 let getTagPosts = async (param) => {
   await initMetaInfoIfNeed();
-  let tagId = getTagId(param.tagSlug);
   return new Promise((resolve, reject) => {
-    callAxios(`${POST}?page=${param.page}&per_page=${PER_PAGE}&tags=${tagId}`)
+    callAxios(`${POST}?page=${param.page}&per_page=${PER_PAGE}&tags=${param.tagId}`)
       .then(res => {
         resolve(extractData(res.data));
       }, error => {

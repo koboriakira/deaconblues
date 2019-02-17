@@ -65,7 +65,7 @@ var postMetaInfo = Vue.extend({
             <span uk-icon="tag"></span>&nbsp;
             <div v-for="tag in tags" :key="tag.id" :tag="tag" style="display: inline-block;">
                 <span style="display: inline-block;">
-                    <router-link :to="{name: 'Tag', params: { slug: tag.slug }}">{{ tag.name }}</router-link>
+                    <router-link :to="{name: 'Tag', params: { id: tag.id }}">{{ tag.name }}</router-link>
                 </span>
                 <span v-if="!isLast(tag, tags)">,&nbsp;</span>
             </div>
@@ -334,7 +334,7 @@ var tagContainer = Vue.extend({
     watch: {
         page() {
             let param = {
-                tagSlug: this.$route.params.slug,
+                tagId: this.$route.params.id,
                 page: this.page
             };
             console.log(param);
@@ -412,7 +412,7 @@ var router = new VueRouter({
             component: categoryContainer,
         },
         {
-            path: '/tag/:slug',
+            path: '/tag/:id',
             name: 'Tag',
             component: tagContainer,
         },
