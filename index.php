@@ -27,7 +27,7 @@
 
 </head>
 <body>
-<div id="app">
+<div id="app" style="line-height: 1.8rem;">
     <header-container></header-container>
     <router-view></router-view>
     <footer-container>Copyright by kobori akira</footer-container>
