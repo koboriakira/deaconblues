@@ -17,6 +17,7 @@
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/uikit-icons.min.js"></script>
 
 <!-- original -->
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/call-axios.js"></script>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/categories.js"></script>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/wprestapi.js"></script>
 
