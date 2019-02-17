@@ -27,20 +27,13 @@
 </head>
 <body>
 <div id="app">
-    <header-container></header-container>
-    <div class="uk-margin-auto" style="max-width: 680px">
-        <blog-post-list v-bind:posts="posts"></blog-post-list>
-        <next-articles-load
-            v-bind:state="buttonState"
-            v-on:load="loadNewArticles()"
-        ></next-articles-load>
-    </div>
-    <footer-container>Copyright by kobori akira<footer-container>
+    <home-container><home-container>
 </div>
 </body>
 <script>
 
 var headerContainer = Vue.extend({
+    name: 'header-container',
     template: `
         <header>
             <h1 class="uk-text-center uk-tile uk-tile-primary">
@@ -146,6 +139,7 @@ var loading = Vue.extend({
 })
 
 var nextArticlesLoad = Vue.extend({
+    name: 'next-articles-load',
     components: {
         'next-articles-load-button': nextArticlesLoadButton,
         'loading': loading
@@ -158,7 +152,7 @@ var nextArticlesLoad = Vue.extend({
                 v-on:execute="_load"
             ></next-articles-load-button>
             <loading v-bind:hidden="state.disabled || !state.loading"></loading>
-        <div>
+        </div>
     `,
     methods: {
         _load: function() {
@@ -168,6 +162,7 @@ var nextArticlesLoad = Vue.extend({
 });
 
 var footerContainer = Vue.extend({
+    name: 'footer-container',
     template: `
         <footer class="footer" style="margin-top: 1em;">
             <div class="content" style="text-align:center;">
@@ -177,14 +172,27 @@ var footerContainer = Vue.extend({
     `
 });
 
-new Vue({
-    el: '#app',
+var homeContainer = Vue.extend({
+    name: 'home-container',
     components: {
         'header-container': headerContainer,
         'blog-post-list': blogPostList,
         'next-articles-load': nextArticlesLoad,
-        'footer-container': footerContainer,
+        'footer-container': footerContainer
     },
+    template: `
+        <div>
+            <header-container></header-container>
+            <div class="uk-margin-auto" style="max-width: 680px">
+                <blog-post-list v-bind:posts="posts"></blog-post-list>
+                <next-articles-load
+                    v-bind:state="buttonState"
+                    v-on:load="loadNewArticles()"
+                ></next-articles-load>
+            </div>
+            <footer-container>Copyright by kobori akira</footer-container>
+        </div>
+    `,
     data: function() {
         return {
             posts: [],
@@ -220,6 +228,13 @@ new Vue({
             console.warn(error);
             this.buttonState.disabled = true;
         }
+    }
+});
+
+new Vue({
+    el: '#app',
+    components: {
+        'home-container': homeContainer,
     }
 });
 </script>
