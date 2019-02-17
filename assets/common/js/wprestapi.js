@@ -85,3 +85,16 @@ let getPosts = (requestParam) => {
       });
   })
 }
+
+let getSinglePost = (postId) => {
+  const domain = getDomain();
+  return new Promise((resolve, reject) => {
+    console.log(`${HTTP}${domain}${POST}/${postId}`);
+    callAxios(`${HTTP}${domain}${POST}/${postId}`)
+      .then(res => {
+        resolve(extractData([res.data]));
+      }, error => {
+        reject(error);
+      });
+  })
+}

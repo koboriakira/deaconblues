@@ -7,7 +7,7 @@
 
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.1/dist/vue-router.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.1/dist/vue-router.js"></script>
 
 <!-- axios -->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -27,7 +27,9 @@
 </head>
 <body>
 <div id="app">
-    <home-container><home-container>
+    <header-container></header-container>
+    <router-view></router-view>
+    <footer-container>Copyright by kobori akira</footer-container>
 </div>
 </body>
 <script>
@@ -37,7 +39,7 @@ var headerContainer = Vue.extend({
     template: `
         <header>
             <h1 class="uk-text-center uk-tile uk-tile-primary">
-                <a href="<?php echo home_url(); ?>" class="uk-link-heading">コボリアキラの要約と反復</a>
+                <router-link to="/" :class="['uk-link-heading']">コボリアキラの要約と反復</router-link>
             </h1>
         </header>
     `
@@ -175,14 +177,11 @@ var footerContainer = Vue.extend({
 var homeContainer = Vue.extend({
     name: 'home-container',
     components: {
-        'header-container': headerContainer,
         'blog-post-list': blogPostList,
-        'next-articles-load': nextArticlesLoad,
-        'footer-container': footerContainer
+        'next-articles-load': nextArticlesLoad
     },
     template: `
         <div>
-            <header-container></header-container>
             <div class="uk-margin-auto" style="max-width: 680px">
                 <blog-post-list v-bind:posts="posts"></blog-post-list>
                 <next-articles-load
@@ -190,7 +189,6 @@ var homeContainer = Vue.extend({
                     v-on:load="loadNewArticles()"
                 ></next-articles-load>
             </div>
-            <footer-container>Copyright by kobori akira</footer-container>
         </div>
     `,
     data: function() {
@@ -231,10 +229,68 @@ var homeContainer = Vue.extend({
     }
 });
 
+var singleContainer = Vue.extend({
+    name: 'single-container',
+    components: {
+        'blog-post-list': blogPostList
+    },
+    template: `
+        <div>
+            <div class="uk-margin-auto" style="max-width: 680px">
+                <blog-post-list v-bind:posts="posts"></blog-post-list>
+            </div>
+        </div>
+    `,
+    data: function() {
+        return {
+            posts: [],
+            page: 0
+        }
+    },
+    mounted: function() {
+        this.loadNewArticles();
+    },
+    watch: {
+        page() {
+            getSinglePost(this.$route.params.postid)
+                .then(data => this.successToLoad(data), err => this.failToLoad(err));
+        }
+    },
+    methods: {
+        loadNewArticles() {
+            this.page++;
+        },
+        successToLoad(data) {
+            this.posts = this.posts.concat(data);
+            console.debug(this.posts);
+        },
+        failToLoad(error) {
+            console.warn(error);
+        }
+    }
+});
+
+var router = new VueRouter({
+    mode: 'history', // URLの末尾にハッシュを入れない設定。副作用は未調査。
+    routes: [
+        {
+            path: '/',
+            component: homeContainer
+        },
+        {
+            path: '/:year/:month/:day/:postid',
+            component: singleContainer,
+            props: true
+        }
+    ]
+});
+
 new Vue({
     el: '#app',
+    router: router,
     components: {
-        'home-container': homeContainer,
+        'header-container': headerContainer,
+        'footer-container': footerContainer
     }
 });
 </script>
