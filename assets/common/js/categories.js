@@ -1,10 +1,11 @@
 const URL_CATEGORIES_API = 'http://' + location.host + '/wp-json/wp/v2/categories';
 
 let categories;
-(() => {
-   callAxios(URL_CATEGORIES_API)
+
+let fetchCategories = async () => {
+   await callAxios(URL_CATEGORIES_API)
       .then(res => categories = res.data);
-})();
+}
 
 let getCategory = id => {
    return categories.find(el => el.id === id);

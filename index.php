@@ -19,6 +19,7 @@
 <!-- original -->
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/call-axios.js"></script>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/categories.js"></script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/tags.js"></script>
 <script src="<?php echo get_template_directory_uri(); ?>/assets/common/js/wprestapi.js"></script>
 
 <!-- stylesheet -->
@@ -58,22 +59,40 @@ var postTitle = Vue.extend({
 
 var postMetaInfo = Vue.extend({
     name: 'post-meta-info',
-    props: ['category', 'date'],
+    props: ['category', 'date', 'tags'],
     template: `
         <div class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-text-right uk-article-title uk-text-meta">
-            <router-link :to="{name: 'Category', params: { first: category.slug }}">
-                <span uk-icon="folder"></span>&nbsp;{{ category.name }}
-            </router-link>
-            <span>&nbsp;&nbsp;</span>
-            <span uk-icon="clock"></span>&nbsp;{{ date }}
+            <span uk-icon="tag"></span>&nbsp;
+            <div v-for="tag in tags" :key="tag.id" :tag="tag" style="display: inline-block;">
+                <span style="display: inline-block;">
+                    <router-link :to="{name: 'Tag', params: { slug: tag.slug }}">{{ tag.name }}</router-link>
+                </span>
+                <span v-if="!isLast(tag, tags)">,&nbsp;</span>
+            </div>
+            <div style="display: inline-block">
+                <span>&nbsp;&nbsp;</span>
+                <router-link :to="{name: 'Category', params: { first: category.slug }}">
+                    <span uk-icon="folder"></span>&nbsp;{{ category.name }}
+                </router-link>
+            </div>
+            <div style="display: inline-block">
+                <span>&nbsp;&nbsp;</span>
+                <span uk-icon="clock"></span>&nbsp;{{ date }}
+            </div>
         </div>
-    `
+    `,
+    methods: {
+        isLast(tag, tags) {
+            console.debug(`isLast`);
+            return tags.slice(-1)[0].id === tag.id;
+        }
+    }
 });
 
 var postContent = Vue.extend({
     name: 'post-content',
     props: ['content'],
-    template: `<div v-html="content" class="uk-padding-small" style="line-height: 1.8rem;"></div>`
+    template: `<div v-html="content" class="uk-padding-small" style="line-height: 1.9rem;"></div>`
 });
 
 var blogPost = Vue.extend({
@@ -88,7 +107,7 @@ var blogPost = Vue.extend({
         <div class="uk-margin-auto" style="max-width: 680px">
             <article class="uk-article uk-width-1-1">
                 <post-title v-bind:title="post.title" v-bind:id="post.id"></post-title>
-                <post-meta-info v-bind:category="post.category" v-bind:date="post.date"></post-meta-info>
+                <post-meta-info v-bind:category="post.category" v-bind:date="post.date" v-bind:tags="post.tags"></post-meta-info>
                 <post-content v-bind:content="post.content"></post-content>
             </article>
         </div>
@@ -284,6 +303,62 @@ var categoryContainer = Vue.extend({
     }
 });
 
+var tagContainer = Vue.extend({
+    name: 'tag-container',
+    components: {
+        'blog-post-list': blogPostList,
+        'next-articles-load': nextArticlesLoad
+    },
+    template: `
+        <div>
+            <blog-post-list v-bind:posts="posts"></blog-post-list>
+            <next-articles-load
+                v-bind:state="buttonState"
+                v-on:load="loadNewArticles()"
+            ></next-articles-load>
+        </div>
+    `,
+    data: function() {
+        return {
+            posts: [],
+            page: 0,
+            buttonState: {
+                loading: false,
+                disabled: false
+            }
+        }
+    },
+    mounted: function() {
+        this.loadNewArticles();
+    },
+    watch: {
+        page() {
+            let param = {
+                tagSlug: this.$route.params.slug,
+                page: this.page
+            };
+            console.log(param);
+            getTagPosts(param)
+                .then(data => this.successToLoad(data), err => this.failToLoad(err));
+        }
+    },
+    methods: {
+        loadNewArticles() {
+            this.buttonState.loading = true;
+            this.page++;
+        },
+        successToLoad(data) {
+            this.posts = this.posts.concat(data);
+            console.debug(this.posts);
+            this.buttonState.loading = false;
+        },
+        failToLoad(error) {
+            console.warn(error);
+            this.buttonState.disabled = true;
+        }
+    }
+});
+
 var singleContainer = Vue.extend({
     name: 'single-container',
     components: {
@@ -335,6 +410,11 @@ var router = new VueRouter({
             path: '/category/:first',
             name: 'Category',
             component: categoryContainer,
+        },
+        {
+            path: '/tag/:slug',
+            name: 'Tag',
+            component: tagContainer,
         },
         {
             path: '/post/:postid',

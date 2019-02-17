@@ -46,12 +46,23 @@ let extractData = datas => {
       content: addUkClasses(data.content.rendered),
       date: data.date.slice(0, 10),
       category: getCategory(data.categories[0]),
+      tags: getTags(data.tags),
       link: data.link,
     };
   })
 }
 
-let getPosts = (param) => {
+let initMetaInfoIfNeed = async () => {
+  if (tags === undefined) {
+    await fetchTags();
+  }
+  if (categories === undefined) {
+    await fetchCategories();
+  }
+}
+
+let getPosts = async (param) => {
+  await initMetaInfoIfNeed();
   const domain = getDomain();
   return new Promise((resolve, reject) => {
     callAxios(`${POST}?page=${param.page}&per_page=${PER_PAGE}`)
@@ -70,8 +81,9 @@ let getLastCategorySlug = (param) => {
   throw new Error('Not found category slug.');
 }
 
-let getCategoryPosts = (param) => {
-  const domain = getDomain();
+let getCategoryPosts = async (param) => {
+  await initMetaInfoIfNeed();
+  console.debug(categories);
   const slug = getLastCategorySlug(param);
   let categoryId = getCategoryId(slug);
   return new Promise((resolve, reject) => {
@@ -84,8 +96,21 @@ let getCategoryPosts = (param) => {
   })
 }
 
-let getSinglePost = (postId) => {
-  const domain = getDomain();
+let getTagPosts = async (param) => {
+  await initMetaInfoIfNeed();
+  let tagId = getTagId(param.tagSlug);
+  return new Promise((resolve, reject) => {
+    callAxios(`${POST}?page=${param.page}&per_page=${PER_PAGE}&tags=${tagId}`)
+      .then(res => {
+        resolve(extractData(res.data));
+      }, error => {
+        reject(error);
+      });
+  })
+}
+
+let getSinglePost = async (postId) => {
+  await initMetaInfoIfNeed();
   return new Promise((resolve, reject) => {
     callAxios(`${POST}/${postId}`)
       .then(res => {
