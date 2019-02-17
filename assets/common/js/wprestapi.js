@@ -42,6 +42,7 @@ let addUkClasses = content => {
 let extractData = datas => {
   return datas.map(data => {
     return {
+      id: data.id,
       title: data.title.rendered,
       content: addUkClasses(data.content.rendered),
       date: data.date.slice(0, 10),
@@ -52,7 +53,7 @@ let extractData = datas => {
 }
 
 let callAxios = url => {
-  console.log(location);
+  console.log(`Fetch '${url}'`);
   return new Promise((resolve, reject) => {
     (async () => {
       try {

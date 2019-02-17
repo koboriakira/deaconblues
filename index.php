@@ -47,11 +47,11 @@ var headerContainer = Vue.extend({
 
 var postTitle = Vue.extend({
     name: 'post-title',
-    props: ['title', 'link'],
+    props: ['title', 'id'],
     template: `
-        <a v-bind:href="link" class="uk-link-heading">
-            <h1 class="uk-heading-divider uk-text-center" v-html="title"></h1>
-        </a>
+        <router-link :to="{name: 'Post', params: { postid: id }}">
+            <h1 class="uk-heading-divider uk-text-center">{{ title }}</h1>
+        </router-link>
     `
 });
 
@@ -60,9 +60,9 @@ var postMetaInfo = Vue.extend({
     props: ['category', 'date'],
     template: `
         <div class="uk-padding-small uk-padding-remove-top uk-padding-remove-bottom uk-text-right uk-article-title uk-text-meta">
-            <a v-bind:href="category.link">
+            <router-link :to="{name: 'Category', params: { first: category.slug }}">
                 <span uk-icon="folder"></span>&nbsp;{{ category.name }}
-            </a>
+            </router-link>
             <span>&nbsp;&nbsp;</span>
             <span uk-icon="clock"></span>&nbsp;{{ date }}
         </div>
@@ -86,7 +86,7 @@ var blogPost = Vue.extend({
     template: `
         <div class="uk-margin-auto" style="max-width: 680px">
             <article class="uk-article uk-width-1-1">
-                <post-title v-bind:title="post.title" v-bind:link="post.link"></post-title>
+                <post-title v-bind:title="post.title" v-bind:id="post.id"></post-title>
                 <post-meta-info v-bind:category="post.category" v-bind:date="post.date"></post-meta-info>
                 <post-content v-bind:content="post.content"></post-content>
             </article>
@@ -104,7 +104,7 @@ var blogPostList = Vue.extend({
         <div>
             <blog-post
                 v-for="post in posts"
-                v-bind:key="post.title"
+                v-bind:key="post.id"
                 v-bind:post="post"
             ></blog-post>
         </div>
@@ -327,17 +327,24 @@ var router = new VueRouter({
     routes: [
         {
             path: '/',
+            name: 'Home',
             component: homeContainer
         },
         {
-            path: '/:year/:month/:day/:postid',
-            component: singleContainer,
-            props: true
+            path: '/category/:first',
+            name: 'Category',
+            component: categoryContainer,
         },
         {
-            path: '/category/:first',
-            component: categoryContainer,
-        }
+            path: '/post/:postid',
+            name: 'Post',
+            component: singleContainer
+        },
+        {
+            path: '/:year/:month/:day/:postid',
+            name: 'PreVersionPost',
+            component: singleContainer
+        },
     ]
 });
 
