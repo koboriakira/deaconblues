@@ -1,14 +1,13 @@
 <template>
   <div class="uk-margin-auto" style="max-width: 680px">
     <article class="uk-article uk-width-1-1">
-      <!-- <post-title v-bind:title="post.title" v-bind:id="post.id"></post-title> -->
+      <post-title v-bind:title="post.title" v-bind:id="post.id"></post-title>
       <!-- <post-meta-info
         v-bind:category="post.category"
         v-bind:date="post.date"
         v-bind:tags="post.tags"
       ></post-meta-info>-->
-      <!-- <PostContent v-bind:content="post.content"/> -->
-      post
+      <PostContent :content="post.content"/>
     </article>
   </div>
 </template>
@@ -25,6 +24,15 @@ export default {
     // "post-title": postTitle,
     PostTitle,
     PostContent
+  },
+  created() {
+    console.debug("BlogPost is created.");
+  },
+  mounted() {
+    console.debug("BlogPost is mounted.");
+  },
+  updated() {
+    console.debug("BlogPost is updated.");
   }
 };
 </script>

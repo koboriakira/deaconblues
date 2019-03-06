@@ -11,6 +11,15 @@ export default {
   components: {
     BlogPost
   },
-  props: ["posts"]
+  props: ["posts"],
+  created() {
+    console.debug("BlogPostLink is created.");
+  },
+  mounted() {
+    console.debug("BlogPostLink is mounted.");
+  },
+  updated() {
+    console.debug("BlogPostLink is updated.");
+  }
 };
 </script>
