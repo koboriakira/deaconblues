@@ -8,6 +8,7 @@
 <script>
 import BlogPostLink from "./BlogPostLink.vue";
 import axios from "axios";
+import akirasample from "@/assets/common/js/akirasample";
 
 const POST = "http://koboriakira.com/wp-json/wp/v2/posts";
 const PER_PAGE = 3;
@@ -184,6 +185,7 @@ export default {
     };
   },
   created() {
+    console.debug(akirasample());
     console.debug("DefaultPosts is created.");
     this.page++;
     let param = { page: this.page };

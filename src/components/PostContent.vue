@@ -3,12 +3,10 @@
 </template>
 
 <script>
-// import akirasample from "@/assets/common/js/akirasample";
 export default {
   name: "PostContent",
   props: ["content"],
   created() {
-    // console.debug(akirasample());
     console.debug("PostContent is created.");
   },
   mounted() {
