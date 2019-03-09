@@ -1,7 +1,7 @@
 <template>
   <div class="uk-margin-auto" style="max-width: 680px">
     <article class="uk-article uk-width-1-1">
-      <post-title v-bind:title="post.title" v-bind:id="post.id"></post-title>
+      <PostTitle :title="post.title" :id="post.id"/>
       <!-- <post-meta-info
         v-bind:category="post.category"
         v-bind:date="post.date"
