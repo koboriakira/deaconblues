@@ -2,11 +2,7 @@
   <div class="uk-margin-auto" style="max-width: 680px">
     <article class="uk-article uk-width-1-1">
       <PostTitle :title="post.title" :id="post.id"/>
-      <!-- <post-meta-info
-        v-bind:category="post.category"
-        v-bind:date="post.date"
-        v-bind:tags="post.tags"
-      ></post-meta-info>-->
+      <PostMetaInfo :category="post.category" :date="post.date" :tags="post.tags"/>
       <PostContent :content="post.content"/>
     </article>
   </div>
@@ -15,15 +11,15 @@
 <script>
 import PostTitle from "./PostTitle.vue";
 import PostContent from "./PostContent.vue";
+import PostMetaInfo from "./PostMetaInfo.vue";
 
 export default {
   name: "BlogPost",
   props: ["post"],
   components: {
-    // "post-meta-info": postMetaInfo,
-    // "post-title": postTitle,
     PostTitle,
-    PostContent
+    PostContent,
+    PostMetaInfo
   },
   created() {
     console.debug("BlogPost is created.");

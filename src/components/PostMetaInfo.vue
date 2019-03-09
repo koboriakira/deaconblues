@@ -30,7 +30,7 @@ export default {
   props: ["category", "date", "tags"],
   methods: {
     isLast(tag, tags) {
-      console.debug(`isLast`);
+      // console.debug(`isLast`);
       return tags.slice(-1)[0].id === tag.id;
     }
   }

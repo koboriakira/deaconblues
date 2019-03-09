@@ -8,11 +8,17 @@
 
 <script>
 import Header from "./Header.vue";
+import Categories from "@/assets/common/js/categories";
+import Tags from "@/assets/common/js/tags";
 
 export default {
   name: "DeaconBlues",
   components: {
     Header
+  },
+  created() {
+    Categories.init();
+    Tags.init();
   }
 };
 </script>
