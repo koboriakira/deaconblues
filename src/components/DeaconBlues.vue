@@ -1,20 +1,22 @@
 <template>
   <div>
-    <Header/>
+    <MyHeader/>
     <router-view></router-view>
-    <Footer>Copyright by kobori akira</Footer>
+    <MyFooter>Copyright by kobori akira</MyFooter>
   </div>
 </template>
 
 <script>
-import Header from "./Header.vue";
+import MyHeader from "./MyHeader.vue";
+import MyFooter from "./MyFooter.vue";
 import Categories from "@/assets/common/js/categories";
 import Tags from "@/assets/common/js/tags";
 
 export default {
   name: "DeaconBlues",
   components: {
-    Header
+    MyHeader,
+    MyFooter
   },
   created() {
     Categories.init();
@@ -23,7 +25,9 @@ export default {
 };
 </script>
 
+<!--
 <style src="../../node_modules/uikit/dist/css/uikit.min.css"></style>
+-->
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

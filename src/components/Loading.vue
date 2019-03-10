@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span uk-spinner="ratio: 3" :class="[{'uk-hidden': hidden}]">Now Loading...</span>
+    <span uk-spinner="ratio: 3" :class="[{'uk-hidden': hidden}]"></span>
   </div>
 </template>
 

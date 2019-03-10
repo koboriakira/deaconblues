@@ -5,3 +5,6 @@
     </h1>
   </header>
 </template>
+
+<style lang="less" scoped>
+</style>

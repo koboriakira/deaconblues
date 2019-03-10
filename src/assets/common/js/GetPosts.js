@@ -93,8 +93,21 @@ let getSinglePost = async postId => {
   });
 };
 
+const createUrl = param => {
+  if (param.postId !== undefined) {
+    return `${POST}/${param.postId}`;
+  }
+  if (param.categoryId !== undefined) {
+    return `${POST}?page=${param.page}&per_page=${PER_PAGE}&categories=${param.categoryId}`
+  }
+  if (param.tagId !== undefined) {
+    return `${POST}?page=${param.page}&per_page=${PER_PAGE}&tags=${param.tagId}`
+  }
+  return `${POST}?page=${param.page}&per_page=${PER_PAGE}`;
+}
+
 export default async function (param) {
-  const url = `${POST}?page=${param.page}&per_page=${PER_PAGE}`;
+  const url = createUrl(param);
   const res = await fetch(url);
   return res;
 }

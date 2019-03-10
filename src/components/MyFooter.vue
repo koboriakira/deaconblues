@@ -8,10 +8,8 @@
   </footer>
 </template>
 
-<style lang="sass" scoped>
-  footer
-    margin-top: 1em;
-    div
-      p
-       text-align: center;
+<style lang="less" scoped>
+div {
+  margin-top: 60px;
+}
 </style>

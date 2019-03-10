@@ -5,16 +5,16 @@
     <span uk-icon="tag"></span>&nbsp;
     <div v-for="tag in tags" :key="tag.id" :tag="tag" style="display: inline-block;">
       <span style="display: inline-block;">
-        <router-link :to="{name: 'Tag', params: { id: tag.id }}">{{ tag.name }}</router-link>
+        <router-link :to="{name: 'Tag', params: { tagId: tag.id }}">{{ tag.name }}</router-link>
       </span>
       <span v-if="!isLast(tag, tags)">,&nbsp;</span>
     </div>
     <div style="display: inline-block">
       <span>&nbsp;&nbsp;</span>
-      <router-link :to="{name: 'Category', params: { first: category.slug }}">
-        <span uk-icon="folder"></span>
-        &nbsp;{{ category.name }}
-      </router-link>
+      <span uk-icon="folder"></span>&nbsp;
+      <router-link
+        :to="{name: 'Category', params: { childSlug: category.slug }}"
+      >{{ category.name }}</router-link>
     </div>
     <div style="display: inline-block">
       <span>&nbsp;&nbsp;</span>

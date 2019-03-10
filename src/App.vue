@@ -6,7 +6,12 @@
 </template>
 
 <script>
+import UIkit from "uikit";
+import Icons from "uikit/dist/js/uikit-icons";
 import DeaconBlues from "./components/DeaconBlues.vue";
+
+// loads the Icon plugin
+UIkit.use(Icons);
 
 export default {
   name: "app",
@@ -16,13 +21,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
+@import "../node_modules/uikit/src/less/uikit.less";
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
