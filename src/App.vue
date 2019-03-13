@@ -13,6 +13,9 @@ import DeaconBlues from "./components/DeaconBlues.vue";
 // loads the Icon plugin
 UIkit.use(Icons);
 
+// title
+document.title = "コボリアキラの要約と反復";
+
 export default {
   name: "app",
   components: {
