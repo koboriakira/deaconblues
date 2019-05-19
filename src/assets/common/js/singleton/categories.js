@@ -12,10 +12,9 @@ class Categories {
 
   async init() {
     this.inited = 1;
-    console.info(`Categories.init()`);
-
     const res = await CategoriesRepository.get();
-    console.debug(res.data);
+    console.info(`Categories.init()`);
+    console.info(res.data);
     this._data = res.data;
     this.inited = 2;
 

@@ -39,18 +39,21 @@ export default {
       const res = await PostsRepository.get(this.page);
       console.info(res);
 
-      const convertAfterAllAPIexecuted = () => {
-        if (Categories.isInited() && Tags.isInited()) {
-          this.buttonState.loading = false;
-          console.info(res.data);
-          this.posts = this.posts.concat(convertPosts(res.data));
-          return;
-        }
-        console.info("wait until all API executed.");
-        setTimeout(convertAfterAllAPIexecuted, 100);
-      };
+      console.info(res.data);
+      this.posts = this.posts.concat(convertPosts(res.data));
+      this.buttonState.loading = false;
+      // const convertAfterAllAPIexecuted = () => {
+      //   if (Categories.isInited() && Tags.isInited()) {
+      //     this.buttonState.loading = false;
+      //     console.info(res.data);
+      //     this.posts = this.posts.concat(convertPosts(res.data));
+      //     return;
+      //   }
+      //   console.info("wait until all API executed.");
+      //   setTimeout(convertAfterAllAPIexecuted, 100);
+      // };
 
-      convertAfterAllAPIexecuted();
+      // convertAfterAllAPIexecuted();
     }
   },
   created() {

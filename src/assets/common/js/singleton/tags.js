@@ -12,9 +12,9 @@ class Tags {
 
   async init() {
     this.inited = 1;
-    console.info(`Tags.init()`);
     const res = await TagsRepository.get();
-    console.debug(res.data);
+    console.info(`Tags.init()`);
+    console.info(res.data);
     this._data = res.data;
     this.inited = 2;
 
