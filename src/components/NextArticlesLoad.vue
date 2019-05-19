@@ -1,7 +1,7 @@
 <template>
   <div class="uk-text-center">
     <NextArticlesLoadButton :hidden="state.disabled || state.loading" v-on:execute="_load"/>
-    <Loading :hidden="state.disabled || !state.loading"/>
+    <Loading v-show="!state.disabled && state.loading"/>
   </div>
 </template>
 
