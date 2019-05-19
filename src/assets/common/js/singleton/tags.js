@@ -1,22 +1,24 @@
 import {
-  API_URL_TAGS
-} from './const.js';
-import fetch from "./fetch.js"
+  RepositoryFactory
+} from "@/assets/common/js/repositories/RepositoryFactory";
+
+const TagsRepository = RepositoryFactory.get("tags");
 
 class Tags {
   constructor() {
     this._data = [];
-    this.inited = 0;
+    this.inited = false;
   }
 
   async init() {
-    this.inited = 1;
+    if (this.inited) {
+      return;
+    }
+    const res = await TagsRepository.get();
     console.info(`Tags.init()`);
-
-    console.info();
-    const res = await fetch(API_URL_TAGS);
+    console.info(res.data);
     this._data = res.data;
-    this.inited = 2;
+    this.inited = true;
 
     // 既存のプロパティ属性と値の変更、および新しいプロパティの追加を防止
     Object.freeze(this);
@@ -24,7 +26,7 @@ class Tags {
 
   isInited() {
     console.debug(`Tags.inited = ${this.inited}`);
-    return this.inited === 2;
+    return this.inited;
   }
 
   getTags(tagIdList) {

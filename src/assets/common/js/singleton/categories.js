@@ -1,21 +1,24 @@
 import {
-  API_URL_CATEGORIES
-} from './const.js';
-import fetch from "./fetch.js"
+  RepositoryFactory
+} from "@/assets/common/js/repositories/RepositoryFactory";
+
+const CategoriesRepository = RepositoryFactory.get("categories");
 
 class Categories {
   constructor() {
     this._data = [];
-    this.inited = 0;
+    this.inited = false;
   }
 
   async init() {
-    this.inited = 1;
+    if (this.inited) {
+      return;
+    }
+    const res = await CategoriesRepository.get();
     console.info(`Categories.init()`);
-
-    const res = await fetch(API_URL_CATEGORIES);
+    console.info(res.data);
     this._data = res.data;
-    this.inited = 2;
+    this.inited = true;
 
     // 既存のプロパティ属性と値の変更、および新しいプロパティの追加を防止
     Object.freeze(this);
@@ -23,7 +26,7 @@ class Categories {
 
   isInited() {
     console.debug(`Categories.inited = ${this.inited}`)
-    return this.inited === 2;
+    return this.inited;
   }
 
   getCategory(id) {

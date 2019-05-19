@@ -8,10 +8,12 @@
 <script>
 import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
-import Categories from "@/assets/common/js/categories";
-import Tags from "@/assets/common/js/tags";
-import getPosts from "@/assets/common/js/GetPosts";
+import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFactory";
+import Categories from "@/assets/common/js/singleton/categories";
 import convertPosts from "@/assets/common/js/ConvertPosts";
+import initSingleton from "@/assets/common/js/singleton/InitSingleton";
+
+const PostsRepository = RepositoryFactory.get("posts");
 
 export default {
   name: "CategoryPosts",
@@ -34,26 +36,13 @@ export default {
       console.debug("loadNewArticles");
       this.buttonState.loading = true;
       this.page++;
+      console.info(this.$route.params.childSlug);
+      await initSingleton();
       const categoryId = Categories.getCategoryId(this.$route.params.childSlug);
-      let param = {
-        page: this.page,
-        categoryId: categoryId
-      };
-      const res = await getPosts(param);
-      console.info(res);
-
-      const convertAfterAllAPIexecuted = () => {
-        if (Categories.isInited() && Tags.isInited()) {
-          this.buttonState.loading = false;
-          console.info(res.data);
-          this.posts = this.posts.concat(convertPosts(res.data));
-          return;
-        }
-        console.info("wait until all API executed.");
-        setTimeout(convertAfterAllAPIexecuted, 100);
-      };
-
-      convertAfterAllAPIexecuted();
+      const res = await PostsRepository.getInCategory(this.page, categoryId);
+      console.info(res.data);
+      this.posts = this.posts.concat(convertPosts(res.data));
+      this.buttonState.loading = false;
     }
   },
   created() {

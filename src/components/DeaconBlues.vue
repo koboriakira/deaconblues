@@ -9,8 +9,8 @@
 <script>
 import MyHeader from "./MyHeader.vue";
 import MyFooter from "./MyFooter.vue";
-import Categories from "@/assets/common/js/categories";
-import Tags from "@/assets/common/js/tags";
+import Categories from "@/assets/common/js/singleton/categories";
+import Tags from "@/assets/common/js/singleton/tags";
 
 export default {
   name: "DeaconBlues",
@@ -19,8 +19,8 @@ export default {
     MyFooter
   },
   created() {
-    Categories.init();
-    Tags.init();
+    // Categories.init();
+    // Tags.init();
   }
 };
 </script>
