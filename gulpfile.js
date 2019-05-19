@@ -5,6 +5,7 @@ var assetsPath = path.resolve(pkg.path.assetsDir);
 
 var gulp = require('gulp');
 var path = require('path');
+var plumber = require('gulp-plumber')
 var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 const ftp = require('vinyl-ftp');
@@ -12,7 +13,7 @@ const minimist = require('minimist');
 
 gulp.task("js", function () {
   return gulp.src([path.join(assetsPath, 'dist/js/*.js')])
-    // .pipe(plumber())
+    .pipe(plumber())
     // .pipe(uglify())
     // .pipe(rename({extname: '.min.js'}))
     .pipe(gulp.dest(path.join(assetsPath, 'common/js/')));

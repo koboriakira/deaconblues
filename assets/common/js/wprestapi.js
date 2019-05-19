@@ -1,4 +1,5 @@
-const POST = 'http://' + location.host + '/wp-json/wp/v2/posts';
+const HTTP = 'http://'
+const POST = '/wp-json/wp/v2/posts';
 const PER_PAGE = 3;
 
 let trimLastSlash = url => url.slice(-1) === '/' ? url.slice(0, -1) : url;
@@ -17,16 +18,24 @@ let getCategorySlug = () => trimProtocol(trimLastSlash(location.href)).split('/'
 
 let createParam = page => {
   const domain = getDomain();
+
+  if (isSingle()) {
+    return {
+      isSingle: true,
+      url: `${HTTP}${domain}${POST}/${getPostId(location.href)}`,
+    };
+  }
+
   if (isCategory()) {
     let categoryId = getCategoryId(getCategorySlug());
     return {
       isCategory: true,
-      url: `${POST}?page=${page}&per_page=${PER_PAGE}&categories=${categoryId}`,
+      url: `${HTTP}${domain}${POST}?page=${page}&per_page=${PER_PAGE}&categories=${categoryId}`,
     };
   }
 
   return {
-    url: `${POST}?page=${page}&per_page=${PER_PAGE}`
+    url: `${HTTP}${domain}${POST}?page=${page}&per_page=${PER_PAGE}`
   };
 }
 
@@ -41,79 +50,37 @@ let addUkClasses = content => {
 let extractData = datas => {
   return datas.map(data => {
     return {
-      id: data.id,
       title: data.title.rendered,
       content: addUkClasses(data.content.rendered),
       date: data.date.slice(0, 10),
       category: getCategory(data.categories[0]),
-      tags: getTags(data.tags),
       link: data.link,
     };
   })
 }
 
-let initMetaInfoIfNeed = async () => {
-  if (tags === undefined) {
-    await fetchTags();
-  }
-  if (categories === undefined) {
-    await fetchCategories();
-  }
-}
-
-let getPosts = async (param) => {
-  await initMetaInfoIfNeed();
-  const domain = getDomain();
+let callAxios = url => {
   return new Promise((resolve, reject) => {
-    callAxios(`${POST}?page=${param.page}&per_page=${PER_PAGE}`)
-      .then(res => {
-        resolve(extractData(res.data));
-      }, error => {
-        reject(error);
-      });
-  })
+    (async () => {
+      try {
+        const res = await axios.get(url);
+        console.log(res);
+        resolve(res);
+      } catch (e) {
+        reject(e);
+      }
+    })();
+  });
 }
 
-let getLastCategorySlug = (param) => {
-  if (param.category.third !== undefined) return param.category.third;
-  if (param.category.second !== undefined) return param.category.second;
-  if (param.category.first !== undefined) return param.category.first;
-  throw new Error('Not found category slug.');
-}
-
-let getCategoryPosts = async (param) => {
-  await initMetaInfoIfNeed();
-  console.debug(categories);
-  const slug = getLastCategorySlug(param);
-  let categoryId = getCategoryId(slug);
+let getPosts = (page) => {
   return new Promise((resolve, reject) => {
-    callAxios(`${POST}?page=${param.page}&per_page=${PER_PAGE}&categories=${categoryId}`)
+    let param = createParam(page);
+    console.log(param.url);
+    callAxios(param.url)
       .then(res => {
-        resolve(extractData(res.data));
-      }, error => {
-        reject(error);
-      });
-  })
-}
-
-let getTagPosts = async (param) => {
-  await initMetaInfoIfNeed();
-  return new Promise((resolve, reject) => {
-    callAxios(`${POST}?page=${param.page}&per_page=${PER_PAGE}&tags=${param.tagId}`)
-      .then(res => {
-        resolve(extractData(res.data));
-      }, error => {
-        reject(error);
-      });
-  })
-}
-
-let getSinglePost = async (postId) => {
-  await initMetaInfoIfNeed();
-  return new Promise((resolve, reject) => {
-    callAxios(`${POST}/${postId}`)
-      .then(res => {
-        resolve(extractData([res.data]));
+        const data = param.isSingle ? [res.data] : res.data;
+        resolve(extractData(data));
       }, error => {
         reject(error);
       });
