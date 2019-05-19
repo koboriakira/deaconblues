@@ -1,32 +1,51 @@
 {
   "name": "deaconblues",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com.deaconblues:koboriakira/deaconblues.git"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "gulp": "^4.0.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.1",
-    "minimist": "^1.2.0",
+    "axios": "^0.18.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
     "uikit": "^3.0.3",
-    "vinyl-ftp": "^0.6.1"
+    "vue": "^2.5.22",
+    "vue-router": "^3.0.2"
   },
-  "path": {
-    "assetsDir": "./assets/"
-  },
-  "style": [
-    "~uikit/dist/css/uikit.min.css"
-  ],
   "devDependencies": {
-    "gulp-plumber": "^1.2.1"
-  }
+    "@vue/cli-plugin-babel": "^3.0.1",
+    "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-service": "^3.7.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }
