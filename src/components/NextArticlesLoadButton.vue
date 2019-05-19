@@ -3,7 +3,7 @@
     <button
       class="uk-button uk-button-primary"
       :class="[{'uk-hidden': hidden}]"
-      v-on:click="_execute"
+      v-on:click="$emit('execute')"
     >次の3件を読む</button>
   </div>
 </template>

@@ -10,7 +10,7 @@ import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
 import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFactory";
 import Tags from "@/assets/common/js/singleton/tags";
-
+import initSingleton from "@/assets/common/js/singleton/InitSingleton";
 import convertPosts from "@/assets/common/js/ConvertPosts";
 import UIkit from "uikit";
 
@@ -37,6 +37,7 @@ export default {
       console.debug("loadNewArticles");
       this.buttonState.loading = true;
       this.page++;
+      await initSingleton();
       const res = await PostsRepository.getInTag(
         this.page,
         this.$route.params.tagId

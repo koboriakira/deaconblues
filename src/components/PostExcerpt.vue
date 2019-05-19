@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "PostContent",
+  name: "PostExcerpt",
   props: ["content", "visible"],
   created() {
     console.debug("PostContent is created.");

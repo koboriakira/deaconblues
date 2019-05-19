@@ -13,6 +13,7 @@ import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFac
 import Categories from "@/assets/common/js/singleton/categories";
 import Tags from "@/assets/common/js/singleton/tags";
 import convertPost from "@/assets/common/js/ConvertPost";
+import initSingleton from "@/assets/common/js/singleton/InitSingleton";
 import UIkit from "uikit";
 
 const PostsRepository = RepositoryFactory.get("posts");
@@ -39,6 +40,7 @@ export default {
       let param = {
         postId: this.$route.params.postId
       };
+      await initSingleton();
       const res = await PostsRepository.getSinglePost(
         this.$route.params.postId
       ).catch(() => {

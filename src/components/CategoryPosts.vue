@@ -11,6 +11,7 @@ import NextArticlesLoad from "./NextArticlesLoad.vue";
 import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFactory";
 import Categories from "@/assets/common/js/singleton/categories";
 import convertPosts from "@/assets/common/js/ConvertPosts";
+import initSingleton from "@/assets/common/js/singleton/InitSingleton";
 
 const PostsRepository = RepositoryFactory.get("posts");
 
@@ -36,6 +37,7 @@ export default {
       this.buttonState.loading = true;
       this.page++;
       console.info(this.$route.params.childSlug);
+      await initSingleton();
       const categoryId = Categories.getCategoryId(this.$route.params.childSlug);
       const res = await PostsRepository.getInCategory(this.page, categoryId);
       console.info(res.data);

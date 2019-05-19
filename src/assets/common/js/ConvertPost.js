@@ -16,6 +16,7 @@ export default function (data) {
   return {
     id: data.id,
     title: data.title.rendered,
+    excerpt: data.excerpt.rendered,
     content: addUkClasses(data.content.rendered),
     date: data.date.slice(0, 10),
     category: Categories.getCategory(data.categories[0]),

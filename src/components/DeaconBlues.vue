@@ -19,8 +19,8 @@ export default {
     MyFooter
   },
   created() {
-    Categories.init();
-    Tags.init();
+    // Categories.init();
+    // Tags.init();
   }
 };
 </script>
