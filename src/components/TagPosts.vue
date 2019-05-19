@@ -8,11 +8,14 @@
 <script>
 import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
-import Categories from "@/assets/common/js/categories";
-import Tags from "@/assets/common/js/tags";
-import getPosts from "@/assets/common/js/GetPosts";
+import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFactory";
+import Categories from "@/assets/common/js/singleton/categories";
+import Tags from "@/assets/common/js/singleton/tags";
+
 import convertPosts from "@/assets/common/js/ConvertPosts";
 import UIkit from "uikit";
+
+const PostsRepository = RepositoryFactory.get("posts");
 
 export default {
   name: "TagPosts",
@@ -35,18 +38,18 @@ export default {
       console.debug("loadNewArticles");
       this.buttonState.loading = true;
       this.page++;
-      let param = {
-        page: this.page,
-        tagId: this.$route.params.tagId
-      };
-      const res = await getPosts(param).catch(() => {
-        console.warn("error!!!!!");
-        this.buttonState.loading = false;
-        this.buttonState.disabled = true;
-        // components can be called from the imported UIkit reference
-        UIkit.notification("これ以上のポストは読み込めませんでした。");
-        return;
-      });
+      const res = await PostsRepository.getInTag(
+        this.page,
+        this.$route.params.tagId
+      );
+      // const res = await getPosts(param).catch(() => {
+      //   console.warn("error!!!!!");
+      //   this.buttonState.loading = false;
+      //   this.buttonState.disabled = true;
+      //   // components can be called from the imported UIkit reference
+      //   UIkit.notification("これ以上のポストは読み込めませんでした。");
+      //   return;
+      // });
       console.info(res);
 
       const convertAfterAllAPIexecuted = () => {

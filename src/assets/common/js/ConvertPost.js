@@ -1,5 +1,5 @@
-import Categories from './categories.js';
-import Tags from './tags.js';
+import Categories from './singleton/categories.js';
+import Tags from './singleton/tags.js';
 
 const addUkClasses = content => {
   const UK_CLASSES = [

@@ -1,7 +1,8 @@
 import {
-  API_URL_TAGS
-} from './const.js';
-import fetch from "./fetch.js"
+  RepositoryFactory
+} from "@/assets/common/js/repositories/RepositoryFactory";
+
+const TagsRepository = RepositoryFactory.get("tags");
 
 class Tags {
   constructor() {
@@ -12,9 +13,8 @@ class Tags {
   async init() {
     this.inited = 1;
     console.info(`Tags.init()`);
-
-    console.info();
-    const res = await fetch(API_URL_TAGS);
+    const res = await TagsRepository.get();
+    console.debug(res.data);
     this._data = res.data;
     this.inited = 2;
 

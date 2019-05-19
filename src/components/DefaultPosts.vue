@@ -8,10 +8,12 @@
 <script>
 import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
-import Categories from "@/assets/common/js/categories";
-import Tags from "@/assets/common/js/tags";
-import getPosts from "@/assets/common/js/GetPosts";
+import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFactory";
+import Categories from "@/assets/common/js/singleton/categories";
+import Tags from "@/assets/common/js/singleton/tags";
 import convertPosts from "@/assets/common/js/ConvertPosts";
+
+const PostsRepository = RepositoryFactory.get("posts");
 
 export default {
   name: "DefaultPosts",
@@ -34,8 +36,7 @@ export default {
       console.debug("loadNewArticles");
       this.buttonState.loading = true;
       this.page++;
-      let param = { page: this.page };
-      const res = await getPosts(param);
+      const res = await PostsRepository.get(this.page);
       console.info(res);
 
       const convertAfterAllAPIexecuted = () => {

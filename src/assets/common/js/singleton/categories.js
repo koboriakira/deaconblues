@@ -1,7 +1,8 @@
 import {
-  API_URL_CATEGORIES
-} from './const.js';
-import fetch from "./fetch.js"
+  RepositoryFactory
+} from "@/assets/common/js/repositories/RepositoryFactory";
+
+const CategoriesRepository = RepositoryFactory.get("categories");
 
 class Categories {
   constructor() {
@@ -13,7 +14,8 @@ class Categories {
     this.inited = 1;
     console.info(`Categories.init()`);
 
-    const res = await fetch(API_URL_CATEGORIES);
+    const res = await CategoriesRepository.get();
+    console.debug(res.data);
     this._data = res.data;
     this.inited = 2;
 

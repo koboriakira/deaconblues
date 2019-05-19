@@ -9,11 +9,13 @@
 import Loading from "./Loading.vue";
 import BlogPost from "./BlogPost.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
-import Categories from "@/assets/common/js/categories";
-import Tags from "@/assets/common/js/tags";
-import getPosts from "@/assets/common/js/GetPosts";
+import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFactory";
+import Categories from "@/assets/common/js/singleton/categories";
+import Tags from "@/assets/common/js/singleton/tags";
 import convertPost from "@/assets/common/js/ConvertPost";
 import UIkit from "uikit";
+
+const PostsRepository = RepositoryFactory.get("posts");
 
 export default {
   name: "SinglePost",
@@ -37,7 +39,9 @@ export default {
       let param = {
         postId: this.$route.params.postId
       };
-      const res = await getPosts(param).catch(() => {
+      const res = await PostsRepository.getSinglePost(
+        this.$route.params.postId
+      ).catch(() => {
         console.warn("error!!!!!");
         // components can be called from the imported UIkit reference
         UIkit.notification("ポストを読み込めませんでした。");
