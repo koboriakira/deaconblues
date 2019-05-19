@@ -8,13 +8,11 @@
 <script>
 import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
-import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFactory";
-import Tags from "@/assets/common/js/singleton/tags";
-import initSingleton from "@/assets/common/js/singleton/InitSingleton";
-import convertPosts from "@/assets/common/js/ConvertPosts";
-import UIkit from "uikit";
 
-const PostsRepository = RepositoryFactory.get("posts");
+import fetchPostsInTag from "@/assets/common/js/posts/fetch/fetchPostsInTag";
+import convertPosts from "@/assets/common/js/ConvertPosts";
+
+import UIkit from "uikit";
 
 export default {
   name: "TagPosts",
@@ -37,19 +35,8 @@ export default {
       console.debug("loadNewArticles");
       this.buttonState.loading = true;
       this.page++;
-      await initSingleton();
-      const res = await PostsRepository.getInTag(
-        this.page,
-        this.$route.params.tagId
-      );
-      // const res = await getPosts(param).catch(() => {
-      //   console.warn("error!!!!!");
-      //   this.buttonState.loading = false;
-      //   this.buttonState.disabled = true;
-      //   // components can be called from the imported UIkit reference
-      //   UIkit.notification("これ以上のポストは読み込めませんでした。");
-      //   return;
-      // });
+      const res = await fetchPostsInTag(this.$route.params.tagId, this.page);
+
       console.info(res.data);
       this.posts = this.posts.concat(convertPosts(res.data));
       this.buttonState.loading = false;

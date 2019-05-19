@@ -8,12 +8,9 @@
 <script>
 import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
-import { RepositoryFactory } from "@/assets/common/js/repositories/RepositoryFactory";
-import Categories from "@/assets/common/js/singleton/categories";
-import convertPosts from "@/assets/common/js/ConvertPosts";
-import initSingleton from "@/assets/common/js/singleton/InitSingleton";
 
-const PostsRepository = RepositoryFactory.get("posts");
+import fetchPostsInCategory from "@/assets/common/js/posts/fetch/fetchPostsInCategory";
+import convertPosts from "@/assets/common/js/ConvertPosts";
 
 export default {
   name: "CategoryPosts",
@@ -37,9 +34,11 @@ export default {
       this.buttonState.loading = true;
       this.page++;
       console.info(this.$route.params.childSlug);
-      await initSingleton();
-      const categoryId = Categories.getCategoryId(this.$route.params.childSlug);
-      const res = await PostsRepository.getInCategory(this.page, categoryId);
+      const res = await fetchPostsInCategory(
+        this.$route.params.childSlug,
+        this.page
+      );
+
       console.info(res.data);
       this.posts = this.posts.concat(convertPosts(res.data));
       this.buttonState.loading = false;
