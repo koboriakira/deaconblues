@@ -10,7 +10,7 @@ import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
 
 import fetchPostsInCategory from "@/assets/common/js/posts/fetch/fetchPostsInCategory";
-import convertPosts from "@/assets/common/js/ConvertPosts";
+import convertPosts from "@/assets/common/js/posts/convert/ConvertPosts";
 
 export default {
   name: "CategoryPosts",
