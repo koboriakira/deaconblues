@@ -16,7 +16,8 @@ class Categories {
     }
     const res = await CategoriesRepository.get();
     console.info(`Categories.init()`);
-    console.info(res.data);
+    console.debug("Show all categories");
+    console.dir(res.data);
     this._data = res.data;
     this.inited = true;
 
@@ -31,6 +32,9 @@ class Categories {
 
   getCategory(id) {
     const result = this._data.find(el => el.id === id);
+    if (result == undefined) {
+      return "";
+    }
     console.debug(`getCategory: ${id} -> ${result.name}`);
     return result;
   }
