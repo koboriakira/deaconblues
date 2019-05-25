@@ -43,7 +43,26 @@ export default {
   },
   created() {
     console.debug("DefaultPosts is created.");
-    this.loadNewArticles();
+    if (location.search === "") {
+      this.loadNewArticles();
+      return;
+    }
+    console.dir(location.href);
+    const param = location.search
+      .replace("?", "")
+      .split("&")
+      .map(el => {
+        const array = el.split("=");
+        return { key: array[0], value: array[1] };
+      });
+    console.dir(param);
+    if (param[1].key === "preview" && param[1].value === "true") {
+      const route = { name: "Post", params: { postId: param[0].value } };
+      console.info("preview mode");
+      this.$router.push(route);
+    } else {
+      this.loadNewArticles();
+    }
   },
   mounted() {
     console.debug("DefaultPosts is mounted.");

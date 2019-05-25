@@ -3,9 +3,9 @@
     <article class="uk-article uk-width-1-1">
       <PostTitle :title="post.title" :id="post.id"/>
       <PostMetaInfo :category="post.category" :date="post.date" :tags="post.tags"/>
-      <PostContent :content="post.content" :visible="!isFolded"/>
-      <PostExcerpt :content="post.excerpt" :visible="isFolded"/>
-      <PostFoldingButton v-on:fold="_fold"/>
+      <PostContent :content="post.content" :visible="isSingle || !isFolded"/>
+      <PostExcerpt :content="post.excerpt" :visible="!isSingle && isFolded"/>
+      <PostFoldingButton v-on:fold="_fold" v-if="!isSingle"/>
     </article>
   </div>
 </template>
@@ -19,7 +19,7 @@ import PostFoldingButton from "./PostFoldingButton.vue";
 
 export default {
   name: "BlogPost",
-  props: ["post"],
+  props: ["post", "isSingle"],
   data() {
     return {
       isFolded: true

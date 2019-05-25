@@ -1,7 +1,7 @@
 <template>
   <div>
     <Loading v-show="!existsPost"/>
-    <BlogPost v-if="existsPost" :post="post"/>
+    <BlogPost v-if="existsPost" :post="post" :isSingle="true"/>
   </div>
 </template>
 
