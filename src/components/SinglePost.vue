@@ -11,7 +11,7 @@ import BlogPost from "./BlogPost.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
 
 import fetchSinglePost from "@/assets/common/js/posts/fetch/fetchSinglePost";
-import convertPost from "@/assets/common/js/ConvertPost";
+import PostModel from "@/assets/common/js/posts/model/PostModel";
 
 import UIkit from "uikit";
 
@@ -44,7 +44,7 @@ export default {
         return;
       });
       console.info(res.data);
-      this.post = convertPost(res.data);
+      this.post = new PostModel(res.data);
     }
   },
   created() {

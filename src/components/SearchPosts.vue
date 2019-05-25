@@ -9,11 +9,11 @@
 import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
 
-import fetchDefaultPosts from "@/assets/common/js/posts/fetch/fetchDefaultPosts";
+import fetchSearchedPosts from "@/assets/common/js/posts/fetch/fetchSearchedPosts";
 import convertPosts from "@/assets/common/js/posts/convert/ConvertPosts";
 
 export default {
-  name: "DefaultPosts",
+  name: "SearchPosts",
   components: {
     BlogPostLink,
     NextArticlesLoad
@@ -28,28 +28,45 @@ export default {
       }
     };
   },
+  watch: {
+    $route: function(to, from) {
+      if (to.path !== from.path) {
+        console.info(`to: ${to}, from:{$from}`);
+        this.clear();
+        this.loadNewArticles();
+      }
+    }
+  },
   methods: {
     loadNewArticles: async function() {
       console.debug("loadNewArticles");
       this.buttonState.loading = true;
       this.page++;
-      const res = await fetchDefaultPosts(this.page);
+      const word = this.$route.params.word.replace("?", "");
+      const res = await fetchSearchedPosts(this.page, word);
       console.info(res);
 
       console.info(res.data);
       this.posts = this.posts.concat(convertPosts(res.data));
       this.buttonState.loading = false;
+    },
+    clear: function() {
+      this.posts = [];
+      this.page = 0;
+      this.buttonState.loading = false;
+      this.buttonState.disabled = false;
     }
   },
   created() {
-    console.debug("DefaultPosts is created.");
+    console.debug("SearchPosts is created.");
     this.loadNewArticles();
   },
   mounted() {
-    console.debug("DefaultPosts is mounted.");
+    console.debug("SearchPosts is mounted.");
   },
   updated() {
-    console.debug("DefaultPosts is updated.");
+    console.debug("SearchPosts is updated.");
+    // this.loadNewArticles();
   }
 };
 </script>

@@ -30,5 +30,12 @@ export default {
     const res = Repository.get(`${resource}/${postId}`);
     console.info("[PostRepository#getSinglePost] end");
     return res;
+  },
+
+  search(page, word) {
+    console.info(`[PostRepository#search] start. [page=${page}, word=${word}]`);
+    const res = Repository.get(`${resource}?${perPage}&page=${page}&search=${word}`);
+    console.info("[PostRepository#search] end");
+    return res
   }
 }

@@ -10,7 +10,7 @@ import BlogPostLink from "./BlogPostLink.vue";
 import NextArticlesLoad from "./NextArticlesLoad.vue";
 
 import fetchPostsInTag from "@/assets/common/js/posts/fetch/fetchPostsInTag";
-import convertPosts from "@/assets/common/js/ConvertPosts";
+import convertPosts from "@/assets/common/js/posts/convert/ConvertPosts";
 
 import UIkit from "uikit";
 
