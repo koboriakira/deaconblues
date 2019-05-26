@@ -18,6 +18,7 @@ export default {
     BlogPostLink,
     NextArticlesLoad
   },
+  props: ["childSlug"],
   data() {
     return {
       posts: [],
@@ -25,7 +26,8 @@ export default {
       buttonState: {
         loading: false,
         disabled: false
-      }
+      },
+      categoryName: this.childSlug
     };
   },
   methods: {
@@ -33,11 +35,8 @@ export default {
       console.debug("loadNewArticles");
       this.buttonState.loading = true;
       this.page++;
-      console.info(this.$route.params.childSlug);
-      const res = await fetchPostsInCategory(
-        this.$route.params.childSlug,
-        this.page
-      );
+      console.info(`childSlug: ${this.categoryName}`);
+      const res = await fetchPostsInCategory(this.categoryName, this.page);
 
       console.info(res.data);
       this.posts = this.posts.concat(convertPosts(res.data));

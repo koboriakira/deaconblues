@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import DefaultPosts from '../components/DefaultPosts'
 import SearchPosts from '../components/SearchPosts'
-import CategoryPosts from '../components/CategoryPosts'
+import CategoryPage from '../components/CategoryPage'
 import TagPosts from '../components/TagPosts'
 import SinglePost from '../components/SinglePost'
 
@@ -17,7 +17,7 @@ export default new Router({
     {
       path: '/category/:childSlug',
       name: 'Category',
-      component: CategoryPosts,
+      component: CategoryPage,
     },
     {
       path: '/tag/:tagId',
