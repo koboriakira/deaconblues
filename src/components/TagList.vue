@@ -1,6 +1,6 @@
 <template>
-  <div class="uk-margin-large-top uk-padding-small uk-background-muted">
-    <div>
+  <div id="tag-list" class="uk-margin-large-top uk-padding-small uk-background-muted">
+    <div class="uk-padding-small">
       <span uk-icon="icon: tag; ratio: 2"></span>
     </div>
     <div>
@@ -57,3 +57,17 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+@media (max-width: 960px) {
+  #tag-list {
+    padding: 0 5px !important;
+  }
+  ul {
+    margin: 0 3px 5px 0 !important;
+  }
+  ul li {
+    padding: 0 !important;
+  }
+}
+</style>

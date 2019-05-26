@@ -1,5 +1,5 @@
 <template>
-  <div class="uk-margin-xlarge-bottom" style="max-width: 680px">
+  <div class="uk-margin-large-top uk-margin-xlarge-bottom">
     <article
       :id="'blog' + post.id"
       class="uk-article uk-width-1-1 uk-box-shadow-small uk-padding-large"
@@ -52,3 +52,20 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+@media (max-width: 960px) {
+  .uk-padding-large {
+    padding-top: 1rem !important;
+    padding-bottom: 2rem !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  .uk-margin-large-top {
+    margin-top: 1rem !important;
+  }
+  .uk-margin-xlarge-bottom {
+    margin-bottom: 1rem !important;
+  }
+}
+</style>

@@ -2,7 +2,7 @@
   <div>
     <div id="scrolltop"></div>
     <MyHeader/>
-    <router-view class="uk-margin-auto" style="max-width: 680px"></router-view>
+    <router-view class="uk-margin-auto" style="max-width: 750px"></router-view>
     <MyFooter/>
   </div>
 </template>
