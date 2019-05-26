@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import DefaultPosts from '../components/DefaultPosts'
 import SearchPosts from '../components/SearchPosts'
 import CategoryPage from '../components/CategoryPage'
-import TagPosts from '../components/TagPosts'
+import TagPage from '../components/TagPage'
 import SinglePost from '../components/SinglePost'
 
 Vue.use(Router)
@@ -22,7 +22,7 @@ export default new Router({
     {
       path: '/tag/:tagId',
       name: 'Tag',
-      component: TagPosts,
+      component: TagPage,
     },
     {
       path: '/post/:postId',

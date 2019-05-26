@@ -31,6 +31,12 @@ export default {
     return res;
   },
 
+  getPostListInTag(page, tagId) {
+    console.info(`[PostRepository#getPostListInTag] page=${page}, tagId=${tagId}`);
+    const res = Repository.get(`${resource}?$per_page=100&page=${page}&tags=${tagId}`);
+    return res;
+  },
+
   getSinglePost(postId) {
     console.info("[PostRepository#getSinglePost] start");
     const res = Repository.get(`${resource}/${postId}`);

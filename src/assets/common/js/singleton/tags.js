@@ -1,6 +1,7 @@
 import {
   RepositoryFactory
 } from "@/assets/common/js/repositories/RepositoryFactory";
+import TagModel from "@/assets/common/js/tag/model/TagModel";
 
 const TagsRepository = RepositoryFactory.get("tags");
 const NOT_INITED = -1;
@@ -24,7 +25,7 @@ class Tags {
     console.info(`Tags.init()`);
     console.info(res.data);
     if (this.inited == INITING) {
-      this._data = res.data;
+      this._data = res.data.map(el => new TagModel(el));
       this.inited = INITED;
     }
 
@@ -47,6 +48,15 @@ class Tags {
     const result = this._data.filter(tag => tag.slug === tagSlug)[0].id;
     console.debug(`getTagId: ${tagSlug} -> ${result}`)
     return result;
+  }
+
+  getTagFromId(tagId) {
+    console.dir(this._data);
+    console.info(`tagId: ${tagId}`)
+    const tag = this._data.find(tag => tag.id === +tagId);
+    console.info("getTagFromId");
+    console.dir(tag);
+    return tag;
   }
 }
 
