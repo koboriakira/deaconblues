@@ -18,6 +18,12 @@ export default {
     return res
   },
 
+  getListInCategory(page, categoryId) {
+    console.info(`[PostRepository#getListInCategory] start[page=${page}, categoryId=${categoryId}]`);
+    const res = Repository.get(`${resource}?per_page=100&page=${page}&categories=${categoryId}`);
+    return res;
+  },
+
   getInTag(page, tagId) {
     console.info("[PostRepository#getInTag] start");
     const res = Repository.get(`${resource}?${perPage}&page=${page}&tags=${tagId}`);

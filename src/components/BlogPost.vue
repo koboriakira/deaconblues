@@ -1,6 +1,6 @@
 <template>
-  <div class="uk-margin-auto uk-margin-xlarge-bottom" style="max-width: 680px">
-    <article class="uk-article uk-width-1-1">
+  <div class="uk-margin-xlarge-bottom" style="max-width: 680px">
+    <article class="uk-article uk-width-1-1 uk-box-shadow-small uk-padding-large">
       <PostTitle :title="post.title" :id="post.id"/>
       <PostMetaInfo :category="post.category" :date="post.date" :tags="post.tags"/>
       <PostContent :content="post.content" :visible="isSingle || !isFolded"/>

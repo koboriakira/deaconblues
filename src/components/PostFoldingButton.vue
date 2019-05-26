@@ -9,14 +9,16 @@ export default {
   name: "PostFoldingButton",
   data() {
     return {
-      txt: "全文を読む"
+      txt: "全文を読む",
+      isFold: true
     };
   },
   methods: {
     _execute: function() {
       console.log("PostFoldingButton.execute");
       this.$emit("fold");
-      this.txt = "折りたたむ";
+      this.isFold = !this.isFold;
+      this.txt = this.isFold ? "全文を読む" : "折りたたむ";
     }
   },
   created() {

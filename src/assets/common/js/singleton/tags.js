@@ -3,22 +3,30 @@ import {
 } from "@/assets/common/js/repositories/RepositoryFactory";
 
 const TagsRepository = RepositoryFactory.get("tags");
-
+const NOT_INITED = -1;
+const INITING = 0;
+const INITED = 1;
 class Tags {
   constructor() {
     this._data = [];
-    this.inited = false;
+    this.inited = NOT_INITED;
   }
 
   async init() {
-    if (this.inited) {
+    if (this.inited == INITED) {
       return;
+    }
+
+    if (this.inited == NOT_INITED) {
+      this.inited = INITING;
     }
     const res = await TagsRepository.get();
     console.info(`Tags.init()`);
     console.info(res.data);
-    this._data = res.data;
-    this.inited = true;
+    if (this.inited == INITING) {
+      this._data = res.data;
+      this.inited = INITED;
+    }
 
     // 既存のプロパティ属性と値の変更、および新しいプロパティの追加を防止
     Object.freeze(this);

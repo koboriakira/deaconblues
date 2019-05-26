@@ -1,16 +1,20 @@
 <template>
   <div>
     <CategoryPosts :childSlug="childSlug"/>
+    <hr class="uk-divider-icon">
+    <CategoryPostList :childSlug="childSlug"/>
   </div>
 </template>
 
 <script>
 import CategoryPosts from "./CategoryPosts.vue";
+import CategoryPostList from "./CategoryPostList.vue";
 
 export default {
   name: "CategoryPage",
   components: {
-    CategoryPosts
+    CategoryPosts,
+    CategoryPostList
   },
   data() {
     return {

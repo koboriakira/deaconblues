@@ -1,7 +1,7 @@
 <template>
   <div>
     <MyHeader/>
-    <router-view></router-view>
+    <router-view class="uk-margin-auto" style="max-width: 680px"></router-view>
     <MyFooter>Copyright by kobori akira</MyFooter>
   </div>
 </template>
@@ -9,8 +9,6 @@
 <script>
 import MyHeader from "./MyHeader.vue";
 import MyFooter from "./MyFooter.vue";
-import Categories from "@/assets/common/js/singleton/categories";
-import Tags from "@/assets/common/js/singleton/tags";
 
 export default {
   name: "DeaconBlues",
