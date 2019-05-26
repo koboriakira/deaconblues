@@ -34,4 +34,8 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+
+blockquote {
+  font-size: 100%;
+}
 </style>

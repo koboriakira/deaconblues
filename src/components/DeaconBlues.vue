@@ -1,8 +1,9 @@
 <template>
   <div>
+    <div id="scrolltop"></div>
     <MyHeader/>
     <router-view class="uk-margin-auto" style="max-width: 680px"></router-view>
-    <MyFooter>Copyright by kobori akira</MyFooter>
+    <MyFooter/>
   </div>
 </template>
 
@@ -15,10 +16,6 @@ export default {
   components: {
     MyHeader,
     MyFooter
-  },
-  created() {
-    // Categories.init();
-    // Tags.init();
   }
 };
 </script>

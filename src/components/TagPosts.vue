@@ -40,6 +40,21 @@ export default {
       console.info(res.data);
       this.posts = this.posts.concat(convertPosts(res.data));
       this.buttonState.loading = false;
+    },
+    clear: function() {
+      this.posts = [];
+      this.page = 0;
+      this.buttonState.loading = false;
+      this.buttonState.disabled = false;
+    }
+  },
+  watch: {
+    $route: function(to, from) {
+      if (to.path !== from.path) {
+        console.info(`to: ${to}, from:${from}`);
+        this.clear();
+        this.loadNewArticles();
+      }
     }
   },
   created() {

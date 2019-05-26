@@ -31,7 +31,7 @@ export default {
   watch: {
     $route: function(to, from) {
       if (to.path !== from.path) {
-        console.info(`to: ${to}, from:{$from}`);
+        console.info(`to: ${to}, from:${from}`);
         this.clear();
         this.loadNewArticles();
       }

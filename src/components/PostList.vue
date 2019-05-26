@@ -18,11 +18,6 @@
 export default {
   name: "PostList",
   props: ["posts", "filterName"],
-  // data() {
-  //   return {
-  //     posts: this.posts
-  //   };
-  // },
   created() {
     console.debug("PostList is created.");
   },

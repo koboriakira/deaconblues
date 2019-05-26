@@ -1,5 +1,5 @@
 <template>
-  <header class="uk-tile uk-tile-primary uk-margin">
+  <header class="uk-tile uk-tile-primary uk-margin uk-margin-remove-top">
     <h1 class="uk-text-center">
       <router-link to="/" :class="['uk-link-heading']">コボリアキラの要約と反復</router-link>
     </h1>

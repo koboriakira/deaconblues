@@ -15,7 +15,7 @@ class Tags {
 
   async init() {
     if (this.inited == INITED) {
-      return;
+      return this._data;
     }
 
     if (this.inited == NOT_INITED) {
@@ -31,6 +31,7 @@ class Tags {
 
     // 既存のプロパティ属性と値の変更、および新しいプロパティの追加を防止
     Object.freeze(this);
+    return this._data
   }
 
   isInited() {

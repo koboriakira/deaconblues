@@ -31,6 +31,22 @@ export default {
       this.filterName = `「${this.tag.name}」タグ`;
 
       this.posts = this.posts.concat(convertPostLink(res.data));
+    },
+    clear: function() {
+      this.posts = [];
+      this.page = 0;
+    }
+  },
+  watch: {
+    $route: function(to, from) {
+      console.dir(to);
+      console.dir(from);
+      if (to.path !== from.path) {
+        console.info(`to: ${to}, from:${from}`);
+        this.clear();
+        this.tagId = to.params.tagId;
+        this.loadNewArticles();
+      }
     }
   },
   created() {
